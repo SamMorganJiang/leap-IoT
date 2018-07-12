@@ -1,0 +1,92 @@
+C51 COMPILER V9.56.0.0   I2C_SLAVE                                                         07/12/2018 11:32:26 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE I2C_SLAVE
+OBJECT MODULE PLACED IN .\I2C_SLAVE.obj
+COMPILER INVOKED BY: C:\Keil_v5c51\C51\BIN\C51.EXE ..\user\I2C_SLAVE.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND
+                    - PRINT(.\I2C_SLAVE.lst) OBJECT(.\I2C_SLAVE.obj)
+
+line level    source
+
+   1          #include "HC89F0650.h"
+   2          #include "Uart.h"
+   3          #include "I2C_SLAVE.h"
+   4          #include "Timer.h"
+   5          
+   6          #define DEVICEADDSLAVE  0x24                    //器件地址
+   7          #define STA     0x20                                            //起始位
+   8          #define STO 0x10                                                //停止位
+   9          #define SI      0x08                                            //IIC串行中断标志
+  10          #define AA      0X04                                            //应答标志
+  11          #define CLR 0x00                                //SI清零
+  12          
+  13          sbit SCL_S=P1^6;
+  14          sbit SDA_S=P1^5;
+  15          
+  16          void IIC_Slave_Init(void)
+  17          {
+  18   1          P1M2 = 0x23;
+  19   1          P1M3 = 0x32;
+  20   1          SCL_MAP = 0x31;
+  21   1          SDA_MAP = 0x30;
+  22   1          IICCON = 0x44;
+  23   1          IICADR = DEVICEADDSLAVE;
+  24   1      }
+  25          
+  26          void IIC_Slave_Recive_Byte(unsigned char data add,unsigned char data dat)
+  27          {
+  28   1          IICCON &=~ SI;
+  29   1          while((IICCON != 0x60));
+  30   1          while((IICCON != 0x68));
+  31   1          IICCON &=~ SI;
+  32   1          add = IICDAT;
+  33   1          while((IICCON != 0x80));
+  34   1          IICCON &=~ SI;
+  35   1          dat = IICDAT;
+  36   1      }
+  37          
+  38          
+  39          unsigned char IIC_Slave_Read_Byte(unsigned char data add)
+  40          {
+  41   1          unsigned char data dat;
+  42   1      
+  43   1          IICCON &=~ SI;
+  44   1          IICCON |= STA;                      //启动
+  45   1          while((!(IICCON&SI))&&(IICSTA!=0x08));
+  46   1          IICCON &=~ STA;
+  47   1          IICCON &=~ SI;
+  48   1          IICDAT = DEVICEADDSLAVE;            //写入写指令
+  49   1          while(IICSTA!=0x18);
+  50   1          IICCON &=~ SI;
+  51   1          IICDAT = add;                       //写入读地址
+  52   1          while(IICSTA!=0x28);
+  53   1          IICCON &=~ SI;
+  54   1          IICCON |= STA;                      //启动
+C51 COMPILER V9.56.0.0   I2C_SLAVE                                                         07/12/2018 11:32:26 PAGE 2   
+
+  55   1          while((!(IICCON&SI))&&(IICSTA!=0x08));
+  56   1          IICCON &=~ STA;
+  57   1          IICCON &=~ SI;
+  58   1          IICDAT = DEVICEADDSLAVE|0x01;//写入读指令
+  59   1          while(IICSTA!=0x40);
+  60   1          IICCON &=~ SI;
+  61   1          while(IICSTA!=0x58); 
+  62   1          dat = IICDAT;                       //读入数据
+  63   1          IICCON &=~ SI;
+  64   1          IICCON |= STO;
+  65   1          return      dat;
+  66   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    148    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

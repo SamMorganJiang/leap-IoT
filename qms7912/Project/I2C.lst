@@ -1,0 +1,100 @@
+C51 COMPILER V9.56.0.0   I2C                                                               07/12/2018 11:32:26 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE I2C
+OBJECT MODULE PLACED IN .\I2C.obj
+COMPILER INVOKED BY: C:\Keil_v5c51\C51\BIN\C51.EXE ..\user\I2C.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT
+                    -(.\I2C.lst) OBJECT(.\I2C.obj)
+
+line level    source
+
+   1          #include "HC89F0650.h"
+   2          #include "Uart.h"
+   3          #include "I2C.h"
+   4          #include "Timer.h"
+   5          
+   6          #define DEVICEADD       0x24                            //器件地址
+   7          #define STA     0x20                                            //起始位
+   8          #define STO 0x10                                                //停止位
+   9          #define SI      0x08                                            //IIC串行中断标志
+  10          #define AA      0X04                                            //应答标志
+  11          
+  12          sbit SCL=P2^7;                                          //模拟I2C时钟控制位
+  13          sbit SDA=P4^4;                                          //模拟I2C数据传送位
+  14          
+  15          
+  16          void IIC_Init(void)
+  17          {
+  18   1          P2M3 = 0xA3;
+  19   1          P4M2 = 0x3A;
+  20   1          SCL_MAP = 0x17;
+  21   1          SDA_MAP = 0x24;
+  22   1          IICCON = 0x40;   
+  23   1      }
+  24          
+  25          void IIC_Send_Byte(unsigned char data add,unsigned char data dat)
+  26          {
+  27   1          IICCON &=~ SI;
+  28   1          IICCON |= STA;                      //启动
+  29   1          while((!(IICCON&SI))&&(IICSTA!=0x08));
+  30   1          IICCON &=~ STA;
+  31   1          IICCON &=~ SI;
+  32   1          IICDAT = DEVICEADD;
+  33   1          while(IICSTA != 0x18);
+  34   1          IICCON &=~ SI;
+  35   1          IICDAT = add;
+  36   1          while(IICSTA!=0x28);
+  37   1          IICCON &=~ SI;
+  38   1          IICDAT = dat;
+  39   1          while(IICSTA!=0x28);
+  40   1          IICCON &=~ SI;
+  41   1          IICCON |= STO; 
+  42   1      }
+  43          
+  44          
+  45          unsigned char IIC_Read_Byte(unsigned char data add)
+  46          {
+  47   1          unsigned char data dat;
+  48   1      
+  49   1          IICCON &=~ SI;
+  50   1          IICCON |= STA;                      //启动
+  51   1          while((!(IICCON&SI))&&(IICSTA!=0x08));
+  52   1          IICCON &=~ STA;
+  53   1          IICCON &=~ SI;
+  54   1          IICDAT = DEVICEADD;         //写入写指令
+C51 COMPILER V9.56.0.0   I2C                                                               07/12/2018 11:32:26 PAGE 2   
+
+  55   1          while(IICSTA!=0x18);
+  56   1          IICCON &=~ SI;
+  57   1          IICDAT = add;                       //写入读地址
+  58   1          while(IICSTA!=0x28);
+  59   1          IICCON &=~ SI;
+  60   1          IICCON |= STA;                      //启动
+  61   1          while((!(IICCON&SI))&&(IICSTA!=0x08));
+  62   1          IICCON &=~ STA;
+  63   1          IICCON &=~ SI;
+  64   1          IICDAT = DEVICEADD|0x01;//写入读指令
+  65   1          while(IICSTA!=0x40);
+  66   1          IICCON &=~ SI;
+  67   1          while(IICSTA!=0x58); 
+  68   1          dat = IICDAT;                       //读入数据
+  69   1          IICCON &=~ SI;
+  70   1          IICCON |= STO;
+  71   1          return      dat;
+  72   1      }
+  73          
+  74          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    177    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

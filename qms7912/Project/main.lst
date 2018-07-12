@@ -1,0 +1,266 @@
+C51 COMPILER V9.56.0.0   MAIN                                                              07/12/2018 11:32:25 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\main.obj
+COMPILER INVOKED BY: C:\Keil_v5c51\C51\BIN\C51.EXE ..\user\main.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\include) DEBU
+                    -G OBJECTEXTEND PRINT(.\main.lst) OBJECT(.\main.obj)
+
+line level    source
+
+   1          #define ALLOCATE_EXTERN
+   2          #include <stdio.h>
+   3          #include <stdlib.h>
+   4          #include "HC89F0650.h"
+   5          #include <HC_DEFINE.H>
+   6          #include "Uart.h"
+   7          #include "SPI.h"
+   8          #include "I2C.h"
+   9          #include "QMA6981.h"
+  10          #include "MG127.h"
+  11          #include "I2C_SLAVE.h"
+  12          #include "Test_Prom.h"
+  13          
+  14          //I2C
+  15          unsigned char data i2c_buf[3]=0;                                //用于存放读写数据
+  16          unsigned char data step_data=0;                                 //用于存放读写数据
+  17          //SPI
+  18          //unsigned char hello[]="hello QST\r";
+  19          unsigned char data id[2];                                                                       //用于存储ID号
+  20          unsigned char data SPI_buf[16];                                                         //用于存储读取数据
+  21          unsigned char data QMS7912_start_Flag;
+  22          //UART
+  23          unsigned char data bufdat = 0;                          //用于存放和接受数据
+  24          unsigned char data bufflag = 0;         
+  25          int data res;
+  26          unsigned char data slave_add;
+  27          unsigned char data slave_dat;
+  28          unsigned char data str[4];
+  29          
+  30          int txcnt = 0;
+  31          int rxcnt = 0;
+  32          int BLE_Test_Case;
+  33          int BLE_Test_Ruslt;                             
+  34          
+  35          void System_init(void);                                 //系统初始化
+  36          void IO_Init(void);                                             //IO初始化
+  37          void UART_Init(void);                                   //UART初始化
+  38          void SendChar(unsigned char Char);
+  39          void SendString(unsigned char *p);
+  40          unsigned char* CharToString(unsigned char n);
+  41          unsigned char* CharToHexStr(unsigned char n);
+  42          
+  43          /***************************************************************************************
+  44           * @实现效果    UART接收到上位机发送的8位数据后，把接收的数据再次发送给上位机
+  45           * @注意                波特率1200，8位数据，无校验位           
+  46           ***************************************************************************************/
+  47          void main(void)
+  48          {
+  49   1          System_init();                                              //系统初始化
+  50   1          IO_Init();                                                  //IO初始化
+  51   1          UART_Init();                                                //UART初始化
+  52   1          IIC_Init();                                         //IIC初始化
+  53   1          SPI_Init();                                         //SPI初始化
+  54   1          ES1 = 1;                                                    //开串口中断
+C51 COMPILER V9.56.0.0   MAIN                                                              07/12/2018 11:32:25 PAGE 2   
+
+  55   1          EA = 1;                                                             //使能总中断
+  56   1      
+  57   1          qma6981_initialize();
+  58   1          res = qmaX981_get_chip_id();
+  59   1          if (res == 1)
+  60   1              SendString("QMAX981_Read_ChipID_Susscess!\n");
+  61   1      
+  62   1          MG127_Init();
+  63   1          SendString("MG127_Init_Susscess!\n");
+  64   1      
+  65   1          QMS7912_start_Flag = 4;
+  66   1      
+  67   1          while(1) {
+  68   2              if (bufflag) {
+  69   3                  SBUF = bufdat;                              //发送数据
+  70   3                  QMS7912_start_Flag = bufdat;
+  71   3                  while(!(SCON&0x02));
+  72   3                  SCON &=~ 0x02;                              //发送中断请求中断标志位清0
+  73   3                  bufflag = 0;                                //标志位置0
+  74   3                  SCON |= 0x10;                               //开串口接收  
+  75   3                              ES1 = 1;                                        //开串口中断
+  76   3              }
+  77   2      
+  78   2              if (QMS7912_start_Flag == 1) {//BLE 发送接收测试
+  79   3                  txcnt=3; //txcnt=0 is for rx only application
+  80   3                  rxcnt=6; //rxcnt=0 is for tx only application
+  81   3                  BLE_TRX();
+  82   3              }
+  83   2      
+  84   2              if (QMS7912_start_Flag == 2) {//BLE FT相关测试
+  85   3                  //FT_TxGain_Init();
+  86   3                  IIC_Slave_Init(); 
+  87   3                  while(1) {
+  88   4                      res = qmaX981_get_chip_id();//IIC_Slave_Recive_Byte(slave_add,slave_dat);
+  89   4                  }
+  90   3              }
+  91   2      
+  92   2              if (QMS7912_start_Flag == 3) {//MCU ADC相关测试
+  93   3                  ADC_TestInit();
+  94   3                  GPIO_TestPinInit();
+  95   3                  ADC_MCUTest();
+  96   3              }
+  97   2      
+  98   2              if (QMS7912_start_Flag == 4) {//加速度原始数据
+  99   3                  qma6981_read_raw_xyz(&i2c_buf);
+ 100   3                  SendString("QMAX981_Read_Rawdata[X ");
+ 101   3                              SendString(CharToHexStr(i2c_buf[0]));            //SendChar(i2c_buf[0]);
+ 102   3                  SendString(",Y ");
+ 103   3                              SendString(CharToHexStr(i2c_buf[1]));            //SendChar(i2c_buf[1]);
+ 104   3                  SendString(",Z ");
+ 105   3                              SendString(CharToHexStr(i2c_buf[2]));            //SendChar(i2c_buf[2]);
+ 106   3                  SendString("]\n");
+ 107   3              }
+ 108   2      
+ 109   2              if (QMS7912_start_Flag == 5) {//加速度计计步器
+ 110   3                  qmaX981_step_c_read_stepCounter(step_data);
+ 111   3                  SendString("QMAX981_Read_Stepdata[");
+ 112   3                  SendString(CharToHexStr(step_data));                        //SendChar(step_data);
+ 113   3                  SendString("]\n");
+ 114   3              }
+ 115   2          }
+ 116   1      }
+C51 COMPILER V9.56.0.0   MAIN                                                              07/12/2018 11:32:25 PAGE 3   
+
+ 117          
+ 118          /***************************************************************************************
+ 119           * @说明        UART中断服务函数
+ 120           * @参数        无
+ 121           * @返回值  无
+ 122           * @注          无
+ 123           ***************************************************************************************/
+ 124          void Usart_Ipt() interrupt UART1_VECTOR
+ 125          {
+ 126   1          if (SCON&0x01) {
+ 127   2              SCON &=~ 0x01;                                  //收到数据后，清除接收标志
+ 128   2              bufdat = SBUF & 0x0f;                   //接收数据（只取低4位）
+ 129   2              bufflag = 1;
+ 130   2              SCON &=~ 0x10;                                  //关串口接收             
+ 131   2              ES1 = 0;                                                //关串口中断
+ 132   2          }
+ 133   1      }
+ 134          
+ 135          /***************************************************************************************
+ 136           * @说明        系统初始化
+ 137           * @参数        无
+ 138           * @返回值  无
+ 139           * @注          关闭看门狗以及时钟初始化
+ 140           ***************************************************************************************/
+ 141          void System_init(void)
+ 142          {
+ 143   1          WDTCCR = 0x00;                                              //关闭看门狗
+ 144   1      
+ 145   1          while((CLKCON&0x20)!=0x20);                 //等待内部高频晶振起振
+ 146   1          CLKDIV = 0x02;                                              //CPU时钟2分频，确保在进行RC32分频时CPU时钟小于16M
+ 147   1          CLKSWR &=~ 0x10;                                    //切换为内部高频时钟
+ 148   1          while((CLKSWR&0x40)!=0x00);                 //等待内部高频切换完成
+ 149   1          CLKDIV = 0x04;                                              //OSC时钟4分频
+ 150   1      }
+ 151          
+ 152          void SendChar(unsigned char Char)
+ 153          {       
+ 154   1          SBUF = Char;
+ 155   1          while(!(SCON&0x02));
+ 156   1          SCON &=~ 0x02;                              //发送中断请求中断标志位清0
+ 157   1      }
+ 158          
+ 159          void SendString(unsigned char *p)
+ 160          {
+ 161   1          while(*p) {
+ 162   2              SendChar(*p);
+ 163   2              p++;
+ 164   2          }
+ 165   1      }
+ 166          
+ 167          unsigned char* CharToHexStr(unsigned char n)
+ 168          {
+ 169   1              unsigned char *pstr;
+ 170   1      
+ 171   1              pstr = str;
+ 172   1              *pstr = n / 16 + '0';
+ 173   1              if (*pstr > '9')
+ 174   1                      *pstr += 39;
+ 175   1      
+ 176   1              *++pstr = n % 16 + '0';
+ 177   1              if (*pstr > '9')
+ 178   1                      *pstr += 39;
+C51 COMPILER V9.56.0.0   MAIN                                                              07/12/2018 11:32:25 PAGE 4   
+
+ 179   1      
+ 180   1              *(++pstr) = '\0';
+ 181   1              return str;
+ 182   1      }
+ 183          
+ 184          unsigned char* CharToString(unsigned char n)
+ 185          {
+ 186   1              unsigned char *pstr;
+ 187   1      
+ 188   1              pstr = str;
+ 189   1              if (n > 99) {
+ 190   2                      *pstr++ = n/100 + '0';
+ 191   2                      n %= 100;
+ 192   2                      *pstr++ = n/10 + '0';
+ 193   2                      n %= 10;
+ 194   2                      *pstr = n + '0';
+ 195   2              } else if (n > 9) {
+ 196   2                      *pstr++ = n/10 + '0';
+ 197   2                      n %= 10;
+ 198   2                      *pstr = n + '0';
+ 199   2              } else {
+ 200   2                      *pstr = n + '0';
+ 201   2              }
+ 202   1      
+ 203   1              *(++pstr) = '\0';
+ 204   1              return str;
+ 205   1      }
+ 206          
+ 207          /***************************************************************************************
+ 208           * @说明        IO初始化
+ 209           * @参数        无
+ 210           * @返回值  无
+ 211           * @注          P00上拉输入，P01推挽输出
+ 212           ***************************************************************************************/
+ 213          void IO_Init(void)
+ 214          {
+ 215   1          //P0M0=0x82;                                                        //P00上拉输入，P01推挽输出
+ 216   1      }
+ 217          
+ 218          /***************************************************************************************
+ 219           * @说明        UART初始化
+ 220           * @参数        无
+ 221           * @返回值  无
+ 222           * @注          8位数据发送，波特率1200
+ 223           ***************************************************************************************/
+ 224          void UART_Init(void)
+ 225          {
+ 226   1          P1M3 = 0x82;
+ 227   1          TXD_MAP = 0x0F;                                             //TXD映射P17
+ 228   1          RXD_MAP = 0x0E;                                             //RXD映射P16
+ 229   1      
+ 230   1          SBRTH = 0xFE5F/256;
+ 231   1          SBRTL = 0xFE5F%256;
+ 232   1          SCON2 = 0x12;                                               //独立波特率
+ 233   1          SCON |= 0X10;                                               //开串口接收  
+ 234   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    680    ----
+   CONSTANT SIZE    =    111    ----
+   XDATA SIZE       =      8       6
+C51 COMPILER V9.56.0.0   MAIN                                                              07/12/2018 11:32:25 PAGE 5   
+
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     33    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
