@@ -9,7 +9,7 @@ sbit	CSN=P0^0;										//P00 CS
 sbit	SCK=P0^1;										//P03 SCK
 sbit    IRQ=P0^5;                   					//P05 IRQ
 sbit	SI=P0^2;										//P02 SI
-sbit	SO=P0^2;	
+sbit	SO=P0^2;
 
 
 /* Private macro -------------------------------------------------------------*/
@@ -33,11 +33,11 @@ int BLE_IRQ_GET(void)
 
 void SPI_Init(void)
 {
-    P0M0 = 0xcc;	
+    P0M0 = 0xcc;
 }
 
-void SPI_Write_Byte(int data1) 
-{ 
+void SPI_Write_Byte(int data1)
+{
     int data i;
     P0M1 = 0x6c;
     for(i = 0; i < 8; i++) {
@@ -52,14 +52,14 @@ void SPI_Write_Byte(int data1)
     }
     SCK = 0;
     SI = 1;
-} 
+}
 
-int SPI_Read_Byte(void) 
-{ 
+int SPI_Read_Byte(void)
+{
     int ret = 0;
     int i = 0;
 
-    P0M1 = 0xc6;	
+    P0M1 = 0xc6;
     for(i = 0; i < 8; i++) {
         SCK = 0;
         SCK = 1;
@@ -71,20 +71,20 @@ int SPI_Read_Byte(void)
     P0M1 = 0x6c;
     SCK = 0;
     return ret;
-} 
+}
 
 void SPI_Write_Reg(int reg, int datae)
-{ 
+{
     CSN = 0;
 
     SPI_Write_Byte(reg);
     SPI_Write_Byte(datae);
 
     CSN = 1;
-} 
+}
 
-int SPI_Read_Reg(int reg) 
-{ 
+int SPI_Read_Reg(int reg)
+{
     int data temp0=0;
 
     CSN = 0;
@@ -94,10 +94,10 @@ int SPI_Read_Reg(int reg)
 
     CSN = 1;
     return temp0;
-} 
+}
 
-void SPI_Write_Buffer(int reg, int *dataBuf, int len) 
-{ 
+void SPI_Write_Buffer(int reg, int *dataBuf, int len)
+{
     int data temp0=0;
 
     CSN = 0;
@@ -113,10 +113,10 @@ void SPI_Write_Buffer(int reg, int *dataBuf, int len)
     delay(5);
 
     CSN = 1;
-} 
+}
 
-void SPI_Read_Buffer(int reg, int *dataBuf, int len) 
-{ 
+void SPI_Read_Buffer(int reg, int *dataBuf, int len)
+{
     int data temp0=0;
 
     CSN = 0;
@@ -421,7 +421,7 @@ void Carrier(void)
     SPI_Write_Reg(0x50, 0x56);
     SPI_Write_Reg(0x20,0x0);
 
-    SPI_Write_Reg(0x50, 0x53);	
+    SPI_Write_Reg(0x50, 0x53);
     SPI_Write_Reg(0x36, 0x8c);  //
     SPI_Write_Reg(0x50, 0x51);
 
@@ -431,7 +431,7 @@ void Carrier(void)
 
     SPI_Write_Reg(0x20,0x0e);
     SPI_Write_Reg(0x26,0x96); //for cont wave
-    SPI_Write_Reg(0xe3,0xff); 	
+    SPI_Write_Reg(0xe3,0xff);
 
     SPI_Write_Reg(0x50, 0x53);
     SPI_Write_Reg(0x36, 0x8e); //
@@ -578,7 +578,7 @@ void FT_TxGain_Init(void)
     SPI_Write_Reg(0x50, 0x56);
     SPI_Write_Reg(0x20,0x0);
     SPI_Write_Reg(0x50, 0x53);
-    SPI_Write_Reg(0x36, 0x8c);  
+    SPI_Write_Reg(0x36, 0x8c);
     SPI_Write_Reg(0x27,0x0F);
     SPI_Write_Buffer(0x4, data_buf, 2);
     SPI_Write_Reg(0x50, 0x51);
@@ -586,13 +586,13 @@ void FT_TxGain_Init(void)
     SPI_Write_Reg(0x25,0x50);  //freq = 2400+80 M
     SPI_Write_Reg(0x24,0x00);
     SPI_Write_Reg(0x20,0x0e);
-    SPI_Write_Reg(0x26,0x96); 
+    SPI_Write_Reg(0x26,0x96);
     SPI_Write_Reg(0xe3,0xff);
     SPI_Write_Reg(0x50, 0x53);
-    SPI_Write_Reg(0x36, 0x8e); 
+    SPI_Write_Reg(0x36, 0x8e);
     SPI_Write_Reg(0x50, 0x51);
     SPI_Write_Reg(0x26, 0x06);
-    SPI_Write_Reg(0x26, 0x96); 
+    SPI_Write_Reg(0x26, 0x96);
     SPI_Write_Reg(0x50, 0x53);
 }
 

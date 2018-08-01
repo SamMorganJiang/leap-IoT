@@ -1,0 +1,632 @@
+C51 COMPILER V9.56.0.0   MG127                                                             08/01/2018 14:08:11 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MG127
+OBJECT MODULE PLACED IN .\MG127.obj
+COMPILER INVOKED BY: C:\Keil_v5c51\C51\BIN\C51.EXE ..\user\MG127.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRI
+                    -NT(.\MG127.lst) OBJECT(.\MG127.obj)
+
+line level    source
+
+   1          /**
+   2            ******************************************************************************
+   3            * @file    :MG127.c
+   4            * @author  :MG Team
+   5            * @version :V1.0
+   6            * @date
+   7            * @brief
+   8            ******************************************************************************
+   9          ***/
+  10          
+  11          /* Includes ------------------------------------------------------------------*/
+  12          //#include "Includes.h"
+  13          #include "HC89F0650.h"
+  14          #include "SPI.h"
+  15          #include "MG127.h"
+  16          
+  17          /* Private typedef -----------------------------------------------------------*/
+  18          /* Private define ------------------------------------------------------------*/
+  19          typedef unsigned char uint8_t;
+  20          typedef unsigned int uint32_t;
+  21          
+  22          
+  23          /* Private macro -------------------------------------------------------------*/
+  24          #define LEN_BLE_ADDR 6
+  25          
+  26          /* Private variables ---------------------------------------------------------*/
+  27          unsigned short tick;
+  28          u8 txcnt = 0;
+  29          u8 rxcnt = 0;
+  30          unsigned char rx_buf[39]; //include header(2B)+mac(6B)+data(max31B), for rx application
+  31          
+  32          //BLE ADV_data, maxlen=31
+  33          #define LEN_DATA 30
+  34          u8 adv_data[LEN_DATA] = {0x02,0x01,0x04,
+  35                                  0x1a,0xff,0x4c,0x00,2,0x15, 0xfd,0xa5,0x06,0x93,0xa4,0xe2,0x4f,0xb1,0xaf,0xcf,0xc6,0xeb,0x07,0x64,0x78,
+             -0x25, 0x27,0x32,0x52,0xa8, 0xCA};
+  36          
+  37          #if 0
+              #define LEN_DATA 30
+              code u8 adv_data[LEN_DATA] = {
+                                              0x02,0x01,0x06,
+                                              0x03,0x02,0xf0,0xff,
+                                              0x16,0xff,0x48,0x43,0x2d,0x30,0x38,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x
+             -00,0x00,0x00
+                                              //0x05,0x12,0x06,0x00,0x0c,0x00,
+                                              //0x02,0x0a,0x04,
+                                              //0x06,0x09,0x48,0x43,0x2d,0x30,0x38
+                                              };
+              #endif
+  48          
+  49          void BLE_Set_rxtxcnt(u8 tx_cnt, u8 rx_cnt)
+  50          {
+  51   1              txcnt = tx_cnt;         //txcnt=0 is for rx only application
+  52   1              rxcnt = rx_cnt;         //rxcnt=0 is for tx only application
+C51 COMPILER V9.56.0.0   MG127                                                             08/01/2018 14:08:11 PAGE 2   
+
+  53   1      }
+  54          
+  55          /* Private function prototypes -----------------------------------------------*/
+  56          void BLE_Do_Cal(void);
+  57          
+  58          
+  59          /*******************************************************************************
+  60          * Function   :          BLE_Mode_Sleep
+  61          * Parameter  :          void
+  62          * Returns    :          void
+  63          * Description:
+  64          * Note:      :          BLE enter sleep mode. current: 3ua
+  65          *******************************************************************************/
+  66          void BLE_Mode_Sleep(void)
+  67          {
+  68   1          u8  temp0[4] = {0x02, 0xff, 0xff, 0xff};
+  69   1      
+  70   1          //temp0[0] = 0x02;
+  71   1          //temp0[1] = 0xff;
+  72   1          //temp0[2] = 0xff;
+  73   1          //temp0[3] = 0xff;
+  74   1      
+  75   1          SPI_Write_Buffer(SLEEP_WAKEUP,temp0,4);
+  76   1      }
+  77          
+  78          /*******************************************************************************
+  79          * Function   :          BLE_Mode_Wakeup
+  80          * Parameter  :          void
+  81          * Returns    :          void
+  82          * Description:
+  83          * Note:      :          BLE reg:0x00--0x1f. write operation must or 0x20
+  84          *******************************************************************************/
+  85          void BLE_Mode_Wakeup(void)
+  86          {
+  87   1          SPI_Write_Reg(SLEEP_WAKEUP|0x20, 0x01);
+  88   1      }
+  89          
+  90          
+  91          void BLE_Mode_PwrUp(void)
+  92          {
+  93   1          SPI_Write_Reg(0X50, 0x51);
+  94   1          SPI_Write_Reg(0X20, 0x7a); //pwr up
+  95   1      
+  96   1          SPI_Write_Reg(0x50, 0x53);
+  97   1          SPI_Write_Reg(0X35, 0x00);
+  98   1          SPI_Write_Reg(0x3d, 0x1e);
+  99   1      
+ 100   1          BLE_Do_Cal();
+ 101   1          SPI_Write_Reg(0x50, 0x56);
+ 102   1          BLE_Mode_Sleep();
+ 103   1      }
+ 104          
+ 105          
+ 106          void BLE_Mode_PwrDn(void)
+ 107          {
+ 108   1          unsigned char temp[2] = {0x81, 0x02};
+ 109   1      
+ 110   1          SPI_Write_Reg(0X50, 0x51);
+ 111   1          SPI_Write_Reg(0X20, 0x78); //pwr down
+ 112   1      
+ 113   1          SPI_Write_Reg(0X50, 0x53);
+ 114   1          SPI_Write_Reg(0x3d, 0x18);
+C51 COMPILER V9.56.0.0   MG127                                                             08/01/2018 14:08:11 PAGE 3   
+
+ 115   1          SPI_Write_Reg(0X35, 0x01);  //tm
+ 116   1      
+ 117   1          //temp[0] = 0x81;
+ 118   1          //temp[1] = 0x02;
+ 119   1          SPI_Write_Buffer(0x13, temp, 2);
+ 120   1          SPI_Write_Reg(0X3e, 0xa0);
+ 121   1      
+ 122   1          SPI_Write_Reg(0X50, 0x56);
+ 123   1      }
+ 124          
+ 125          
+ 126          /*******************************************************************************
+ 127          * Function   :          BLE_Set_StartTime
+ 128          * Parameter  :          u32
+ 129          * Returns    :          void
+ 130          * Description:
+ 131          * Note:      :
+ 132          *******************************************************************************/
+ 133          void BLE_Set_StartTime(u32 htime)
+ 134          {
+ 135   1          u8 temp0[3];
+ 136   1      
+ 137   1          temp0[0] = htime & 0xFF;
+ 138   1          temp0[1] = (htime>>8) & 0xFF;
+ 139   1          temp0[2] = (htime>>16) & 0xFF;
+ 140   1      
+ 141   1          SPI_Write_Buffer(START_TIME,temp0,3);
+ 142   1      }
+ 143          
+ 144          
+ 145          /*******************************************************************************
+ 146          * Function   :          BLE_Set_TimeOut
+ 147          * Parameter  :          u32 data_us
+ 148          * Returns    :          void
+ 149          * Description:      TX/RX timeout .unit:us
+ 150          * Note:      :
+ 151          *******************************************************************************/
+ 152          void BLE_Set_TimeOut(u32 data_us)
+ 153          {
+ 154   1          u8 temp0[3];
+ 155   1      
+ 156   1          temp0[0] = data_us & 0xff;
+ 157   1          temp0[1] = (data_us >> 8) & 0xff;
+ 158   1          temp0[2] = (data_us >> 16) & 0xff;
+ 159   1      
+ 160   1          SPI_Write_Buffer(TIMEOUT, temp0, 3);
+ 161   1      }
+ 162          
+ 163          #if 0
+              /*******************************************************************************
+              * Function   :          BLE_Set_Xtal
+              * Parameter  :          u8
+              * Returns    :          void
+              * Description:
+              * Note:      :
+              *******************************************************************************/
+              void BLE_Set_Xtal(u8 on_flag)
+              {
+                  SPI_Write_Reg(0x50, 0x53);
+                  SPI_Write_Reg(0x3D, 0x18|(on_flag<<2));
+                  SPI_Write_Reg(0x50, 0x56);
+              }
+C51 COMPILER V9.56.0.0   MG127                                                             08/01/2018 14:08:11 PAGE 4   
+
+              #endif
+ 178          
+ 179          static void BLE_Get_Pdu(u8 *ptr, u8 *len)
+ 180          {
+ 181   1          u8 hdr_type;
+ 182   1          u8 len_tmp;
+ 183   1          u8 bank_buf[6];
+ 184   1      
+ 185   1          SPI_Read_Buffer(ADV_HDR_RX, bank_buf, 2);
+ 186   1      
+ 187   1          *len = bank_buf[1] + 2;
+ 188   1          ptr[0] = bank_buf[0];
+ 189   1          ptr[1] = bank_buf[1];
+ 190   1      
+ 191   1          hdr_type = bank_buf[0] & 0xF;
+ 192   1          len_tmp = bank_buf[1];
+ 193   1          switch(hdr_type){
+ 194   2              case ADV_IND:  //advA+0~31
+ 195   2              case ADV_NONCONN_IND:
+ 196   2              case ADV_SCAN_IND:
+ 197   2              //case ADV_SCAN_RSP:
+ 198   2                  SPI_Read_Buffer(INITA_RX, &ptr[2], LEN_BLE_ADDR);  //INITA
+ 199   2                  len_tmp -= LEN_BLE_ADDR;
+ 200   2                  break;
+ 201   2      /*
+ 202   2              case ADV_DIRECT_IND:  //advA+InitA
+ 203   2                  if(len_tmp == 12){
+ 204   2                      SPI_Read_Buffer(ADVA_RX, &ptr[2], LEN_BLE_ADDR);  //advA
+ 205   2                      len_tmp -= LEN_BLE_ADDR;
+ 206   2                      SPI_Read_Buffer(INITA_RX, &ptr[2+LEN_BLE_ADDR], LEN_BLE_ADDR);  //INITA
+ 207   2                      len_tmp -= LEN_BLE_ADDR;
+ 208   2                  }
+ 209   2                  len_tmp = 0;
+ 210   2                  break;
+ 211   2              case ADV_SCAN_REQ:  //scanA + advA
+ 212   2                  if(len_tmp == 12){
+ 213   2                      SPI_Read_Buffer(INITA_RX, &ptr[2], LEN_BLE_ADDR);  //INITA
+ 214   2                      len_tmp -= LEN_BLE_ADDR;
+ 215   2                      SPI_Read_Buffer(ADVA_RX, &ptr[2+LEN_BLE_ADDR], LEN_BLE_ADDR);  //advA
+ 216   2                      len_tmp -= LEN_BLE_ADDR;
+ 217   2                  }
+ 218   2                  len_tmp = 0;
+ 219   2                  break;
+ 220   2              case ADV_CONN_REQ:  //InitA + advA + LL(22B)
+ 221   2                  if(len_tmp == 34){
+ 222   2                      SPI_Read_Buffer(INITA_RX, &ptr[2], LEN_BLE_ADDR);  //INITA
+ 223   2                      SPI_Read_Buffer(ADVA_RX, &ptr[2+LEN_BLE_ADDR], LEN_BLE_ADDR);  //advA
+ 224   2                      SPI_Read_Buffer(R_RX_PAYLOAD, &ptr[2+LEN_BLE_ADDR+LEN_BLE_ADDR], 22);
+ 225   2                  }
+ 226   2                  len_tmp = 0;
+ 227   2                  break;
+ 228   2      */
+ 229   2              default:
+ 230   2                  len_tmp = 0;
+ 231   2                  break;
+ 232   2          }
+ 233   1      
+ 234   1          if(len_tmp > 0){
+ 235   2              SPI_Read_Buffer(R_RX_PAYLOAD, &ptr[2+LEN_BLE_ADDR], len_tmp);
+ 236   2          }
+ 237   1      }
+ 238          
+C51 COMPILER V9.56.0.0   MG127                                                             08/01/2018 14:08:11 PAGE 5   
+
+ 239          
+ 240          #define TXGAIN_DEF 0x12
+ 241          
+ 242          void BLE_Do_Cal()  //calibration
+ 243          {
+ 244   1          u8 data_buf[2];
+ 245   1      
+ 246   1          SPI_Write_Reg(0x3F, 0x03);
+ 247   1          do{
+ 248   2              data_buf[0] = SPI_Read_Reg(0x1F);
+ 249   2          }while(data_buf[0]&0x03);
+ 250   1      
+ 251   1          SPI_Write_Reg(0x3F, 0x03);
+ 252   1          do{
+ 253   2              data_buf[0] = SPI_Read_Reg(0x1F);
+ 254   2          }while(data_buf[0]&0x03);
+ 255   1      
+ 256   1          //////////////////////////////////////////////////
+ 257   1          SPI_Write_Reg(0x35,0x01); //testm for tx/temp
+ 258   1          SPI_Write_Reg(0x32,0xA0);
+ 259   1          SPI_Write_Reg(0x2a,0x04);
+ 260   1          SPI_Write_Reg(0x2a,0x00);
+ 261   1      
+ 262   1          SPI_Write_Reg(0x32,0x88);
+ 263   1          data_buf[0] = 0x01;
+ 264   1          data_buf[1] = 0x21;
+ 265   1          SPI_Write_Buffer(0x13, data_buf, 2);
+ 266   1          data_buf[0] = 0x01;
+ 267   1          data_buf[1] = 0x20;
+ 268   1          SPI_Write_Buffer(0x13, data_buf, 2);
+ 269   1          SPI_Write_Reg(0x35,0x00);  //exist testm
+ 270   1          ////////////////////////////////////////////////////
+ 271   1      
+ 272   1      }
+ 273          
+ 274          /*******************************************************************************
+ 275          * Function   :          BLE_Init
+ 276          * Parameter  :          void
+ 277          * Returns    :          void
+ 278          * Description:      power on .BLE must initnal reg .
+ 279          * Note:      :          delay 30ms .
+ 280          *******************************************************************************/
+ 281          void BLE_Init(void)
+ 282          {
+ 283   1          u8 status;
+ 284   1          u8 data_buf[4];
+ 285   1          u8 ble_Addr[6];
+ 286   1      
+ 287   1      
+ 288   1          SPI_Write_Reg(0x50, 0x51);
+ 289   1          SPI_Write_Reg(0x50, 0x53);
+ 290   1          SPI_Write_Reg(0x35, 0x00);
+ 291   1                SPI_Write_Reg(0x36, 0x8c);//Fabe
+ 292   1          SPI_Write_Reg(0x3D, 0x18);
+ 293   1          SPI_Write_Reg(0x50, 0x51);
+ 294   1      
+ 295   1          do{
+ 296   2              SPI_Write_Reg(0x50, 0x53);
+ 297   2      
+ 298   2              data_buf[0] = 0;
+ 299   2              data_buf[1] = 0;
+ 300   2              data_buf[2] = 1;
+C51 COMPILER V9.56.0.0   MG127                                                             08/01/2018 14:08:11 PAGE 6   
+
+ 301   2              SPI_Write_Buffer(0x00, data_buf, 3);
+ 302   2      
+ 303   2              SPI_Write_Reg(0x36, 0x8e);
+ 304   2              SPI_Write_Reg(0x37, 0x88);
+ 305   2              SPI_Write_Reg(0x38, 0x88);
+ 306   2              SPI_Write_Reg(0x39, 0x8e);
+ 307   2      
+ 308   2              SPI_Write_Reg(0x50, 0x51);
+ 309   2      
+ 310   2              SPI_Read_Reg(0x1e);
+ 311   2      
+ 312   2              status = SPI_Read_Reg(CHIP_OK);
+ 313   2          }while(status != 0x80);
+ 314   1      
+ 315   1      #if 1 //debug
+ 316   1          //read chip version
+ 317   1              //status = SPI_Read_Reg(0x1e);
+ 318   1          //Uart_Send_String("chip version=");
+ 319   1      //    Uart_Send_Byte(status);
+ 320   1          //Uart_Send_String("\r\n");
+ 321   1      #endif
+ 322   1      
+ 323   1          SPI_Write_Reg(0X20, 0x78);//power down,tx, for hot reset
+ 324   1          SPI_Write_Reg(0X26, 0x06);//1Mbps
+ 325   1          SPI_Write_Reg(0X20, 0x7a);//power up
+ 326   1      
+ 327   1          SPI_Write_Reg(0x50, 0x56);
+ 328   1      
+ 329   1          BLE_Mode_Sleep();
+ 330   1      
+ 331   1      #if 1 //debug
+ 332   1          //read BLE address. BLE MAC Address
+ 333   1          SPI_Read_Buffer(0x08, ble_Addr, 6);
+ 334   1      
+ 335   1          //Uart_Send_String("BleAddr=");
+ 336   1          //Uart_Send_Byte(ble_Addr[5]);
+ 337   1          //Uart_Send_Byte(ble_Addr[4]);
+ 338   1          //Uart_Send_Byte(ble_Addr[3]);
+ 339   1          //Uart_Send_Byte(ble_Addr[2]);
+ 340   1          //Uart_Send_Byte(ble_Addr[1]);
+ 341   1          //Uart_Send_Byte(ble_Addr[0]);
+ 342   1          //Uart_Send_String("\r\n");
+ 343   1      #endif
+ 344   1      
+ 345   1      
+ 346   1          SPI_Write_Reg(0x50, 0x53);
+ 347   1      
+ 348   1          data_buf[0] = 0x7f;
+ 349   1          data_buf[1] = 0x80; //xocc
+ 350   1          SPI_Write_Buffer(0x14,data_buf,2);
+ 351   1      
+ 352   1          //set BLE TX Power
+ 353   1          data_buf[0] = 0x02;
+ 354   1          data_buf[1] = BLE_TX_POWER;
+ 355   1          SPI_Write_Buffer(0x0f,data_buf,2);
+ 356   1      
+ 357   1          data_buf[1] = SPI_Read_Reg(0x08);  //txgain
+ 358   1          if(0 == data_buf[1]){
+ 359   2            data_buf[1] = TXGAIN_DFF;
+ 360   2          }
+ 361   1          data_buf[0] = 0xc0;
+ 362   1          data_buf[2] = 0x2D; //rx
+C51 COMPILER V9.56.0.0   MG127                                                             08/01/2018 14:08:11 PAGE 7   
+
+ 363   1          SPI_Write_Buffer(0x4, data_buf, 3);
+ 364   1      
+ 365   1      
+ 366   1          data_buf[0] = 0x80; //rx
+ 367   1          data_buf[1] = 0x00;
+ 368   1          SPI_Write_Buffer(0x0C, data_buf, 2);
+ 369   1      
+ 370   1          data_buf[0] = 0x81;
+ 371   1          data_buf[1] = 0x22;
+ 372   1          SPI_Write_Buffer(0x13, data_buf, 2);
+ 373   1      
+ 374   1          SPI_Write_Reg(0X21, 0x02);
+ 375   1          SPI_Write_Reg(0x3C, 0x30);
+ 376   1          SPI_Write_Reg(0x3E, 0x30);
+ 377   1      
+ 378   1          data_buf[0] = 0x38;
+ 379   1          data_buf[1] = 0x0F;
+ 380   1          data_buf[2] = 0x00; //gc
+ 381   1          SPI_Write_Buffer(0x02, data_buf, 3);
+ 382   1      
+ 383   1          data_buf[0] = 0x80;
+ 384   1          data_buf[1] = 0x70; //gain
+ 385   1          data_buf[2] = 0x21;
+ 386   1          data_buf[3] = 0x40; //rx
+ 387   1          SPI_Write_Buffer(0x0b, data_buf, 4);
+ 388   1      
+ 389   1          SPI_Write_Reg(0x29, 0x71); //gain
+ 390   1      
+ 391   1          data_buf[0] = 0x10;
+ 392   1          data_buf[1] = 0x02;
+ 393   1          SPI_Write_Buffer(0xA, data_buf, 2);
+ 394   1      
+ 395   1          data_buf[0] = 0x02;
+ 396   1          data_buf[1] = 0x12;
+ 397   1          SPI_Write_Buffer(0xD, data_buf, 2);
+ 398   1      
+ 399   1          data_buf[0] = 0x01;
+ 400   1          data_buf[1] = 0x07;
+ 401   1          SPI_Write_Buffer(0xE, data_buf, 2);
+ 402   1      
+ 403   1          SPI_Write_Reg(0x50, 0x56);
+ 404   1      }
+ 405          
+ 406          //2480MHz carrier, for xtal capacitor tuning
+ 407          //call this function after BLE_Init() in main()
+ 408          void Carrier(void)
+ 409          {
+ 410   1          unsigned long delay=0x14000;
+ 411   1          u8 data_buf[2] = {0xc0, 0x00};
+ 412   1      
+ 413   1          SPI_Write_Reg(0x50, 0x51);
+ 414   1          SPI_Write_Reg(0x50, 0x53);
+ 415   1      
+ 416   1          SPI_Write_Reg(0x3d, 0x1e);
+ 417   1          while(delay--);
+ 418   1      
+ 419   1          SPI_Write_Reg(0x50, 0x56);
+ 420   1          SPI_Write_Reg(0x20,0x0);
+ 421   1      
+ 422   1          SPI_Write_Reg(0x50, 0x53);
+ 423   1          SPI_Write_Reg(0x36, 0x8c);  //
+ 424   1          SPI_Write_Reg(0x27,0x0F);
+C51 COMPILER V9.56.0.0   MG127                                                             08/01/2018 14:08:11 PAGE 8   
+
+ 425   1          SPI_Write_Buffer(0x4, data_buf, 2);
+ 426   1          data_buf[0] = 0x24;
+ 427   1          data_buf[1] = 0x2e;
+ 428   1          SPI_Write_Buffer(0x11, data_buf, 2);
+ 429   1          SPI_Write_Reg(0x50, 0x51);
+ 430   1      
+ 431   1          SPI_Write_Reg(0x21,0x00);
+ 432   1          SPI_Write_Reg(0x25,0x50);
+ 433   1          SPI_Write_Reg(0x24,0x00);
+ 434   1      
+ 435   1          SPI_Write_Reg(0x20,0x0e);
+ 436   1          SPI_Write_Reg(0x26,0x96); //for cont wave
+ 437   1          SPI_Write_Reg(0xe3,0xff);
+ 438   1      
+ 439   1          SPI_Write_Reg(0x50, 0x53);
+ 440   1          SPI_Write_Reg(0x36, 0x8e); //
+ 441   1      
+ 442   1          SPI_Write_Reg(0x50, 0x51);
+ 443   1          SPI_Write_Reg(0x26, 0x06);
+ 444   1          SPI_Write_Reg(0x26, 0x96);
+ 445   1      
+ 446   1          SPI_Write_Reg(0x50, 0x53);
+ 447   1      
+ 448   1          while(1){};
+ 449   1      }
+ 450          
+ 451          //16MHz output by IRQ pin, for xtal capacitor tuning
+ 452          void XOClockOutput(void)
+ 453          {
+ 454   1          u8 data_buf[3];
+ 455   1      
+ 456   1          SPI_Write_Reg(0x50, 0x51);
+ 457   1          SPI_Write_Reg(0x50, 0x53);
+ 458   1      
+ 459   1          SPI_Write_Reg(0x35,0x01);
+ 460   1          data_buf[0] = 0x93;
+ 461   1          data_buf[1] = 0x00;
+ 462   1          SPI_Write_Buffer(0x14, data_buf, 2);
+ 463   1          SPI_Write_Reg(0x3e,0x30);
+ 464   1          SPI_Write_Reg(0x31,0x00);
+ 465   1          SPI_Write_Reg(0x3b,0x48);
+ 466   1          data_buf[0] = 0x00;
+ 467   1          data_buf[1] = 0x00;
+ 468   1          data_buf[2] = 0x15;
+ 469   1          SPI_Write_Buffer(0x12, data_buf, 3);
+ 470   1      
+ 471   1          while(1){};
+ 472   1      }
+ 473          
+ 474          /*******************************************************************************
+ 475          * Function   :          BLE_TRX
+ 476          * Parameter  :          txcnt, rxcnt
+ 477          * Returns    :          void
+ 478          * Description:      Beacon data .process .
+ 479          * Note:      :
+ 480          *******************************************************************************/
+ 481          void BLE_TRX(void)
+ 482          {
+ 483   1          u8 status = 0;
+ 484   1          u8 ch = 37;
+ 485   1          u8 data_buf[2];
+ 486   1          u8 tmp_cnt = txcnt+rxcnt;
+C51 COMPILER V9.56.0.0   MG127                                                             08/01/2018 14:08:11 PAGE 9   
+
+ 487   1          u8 len_pdu = 0;
+ 488   1          u8 loop = 0;
+ 489   1      
+ 490   1          if(tmp_cnt == 0) return;
+ 491   1      
+ 492   1      
+ 493   1          BLE_Mode_PwrUp();
+ 494   1      
+ 495   1      #if 1  //if adv_data no change, can move this block to the end of BLE_Init()
+ 496   1          //set BLE TX default channel:37.38.39
+ 497   1          SPI_Write_Reg(CH_NO|0X20, ch);
+ 498   1      
+ 499   1          //BLT FIFO write adv_data . max len:31 byte
+ 500   1          SPI_Write_Buffer(W_TX_PAYLOAD, adv_data, LEN_DATA);
+ 501   1      
+ 502   1          //PDU TYPE: 2  non-connectable undirected advertising . tx add:random address
+ 503   1          //set BLT PDU length:adv_data+6 mac adress.
+ 504   1          data_buf[0] = 0x02;
+ 505   1          data_buf[1] = LEN_DATA+LEN_BLE_ADDR;
+ 506   1          SPI_Write_Buffer(ADV_HDR_TX, data_buf, 2);
+ 507   1      
+ 508   1          //clear all interrupt
+ 509   1          data_buf[0] = 0xFF;
+ 510   1          data_buf[1] = 0x80;
+ 511   1          SPI_Write_Buffer(INT_FLAG, data_buf, 2);
+ 512   1      #endif
+ 513   1      
+ 514   1          BLE_Mode_Wakeup();
+ 515   1      
+ 516   1          BLE_Set_TimeOut(BLE_RX_TIMEOUT);
+ 517   1          tick = BLE_GUARD_TIME;
+ 518   1      
+ 519   1          while(1)
+ 520   1          {
+ 521   2              //BLE IRQ LOW
+ 522   2              if(mcu_get_irq())               //(IRQ == 0) //(!BLE_IRQ_GET())
+ 523   2              {
+ 524   3                  //clear interrupt flag
+ 525   3                  status = SPI_Read_Reg(INT_FLAG);
+ 526   3                  SPI_Write_Reg(INT_FLAG|0X20, status);
+ 527   3                  //Uart_Send_Byte(status); //debug
+ 528   3      
+ 529   3                  if(INT_TYPE_WAKEUP & status)//wakeup
+ 530   3                  {
+ 531   4                      if(txcnt > 0){
+ 532   5                          txcnt --;
+ 533   5                          SPI_Write_Reg(MODE_TYPE|0X20, RADIO_MODE_ADV_TX);
+ 534   5                          BLE_Set_StartTime(BLE_START_TIME);
+ 535   5                      }else if(rxcnt > 0){
+ 536   5                          rxcnt --;
+ 537   5                          SPI_Write_Reg(MODE_TYPE|0X20, RADIO_MODE_ADV_RX);
+ 538   5                          BLE_Set_StartTime(BLE_START_TIME);
+ 539   5                      }
+ 540   4                      continue; //goto while(1)
+ 541   4      
+ 542   4                  }
+ 543   3      
+ 544   3                  BLE_Mode_Sleep();
+ 545   3      
+ 546   3                  if(INT_TYPE_PDU_OK & status){ //only happen in rx application, no need porting in tx only appl
+             -ication
+ 547   4                      //LED_RED_ON(); //debug
+C51 COMPILER V9.56.0.0   MG127                                                             08/01/2018 14:08:11 PAGE 10  
+
+ 548   4                      BLE_Get_Pdu(rx_buf, &len_pdu);
+ 549   4      #if 1 //debug
+ 550   4                      //Uart_Send_String("\r\nRX: ");
+ 551   4                        for(loop=0; loop<len_pdu; loop++){
+ 552   5                          //Uart_Send_Byte(rx_buf[loop]);
+ 553   5                          //Uart_Send_String(" ");
+ 554   5                        }
+ 555   4      #endif
+ 556   4                  }else if(INT_TYPE_TX_START & status){ //only happen in tx application
+ 557   4                      //LED_GREEN_ON(); //debug
+ 558   4                  }
+ 559   3      
+ 560   3                  if(INT_TYPE_SLEEP & status)//sleep
+ 561   3                  {
+ 562   4                      //LED_GREEN_OFF(); //debug
+ 563   4                      //LED_RED_OFF();  //debug
+ 564   4                      tick = BLE_GUARD_TIME;
+ 565   4      
+ 566   4                      //BLE channel
+ 567   4                      if (++ch > 39){
+ 568   5                          ch = 37;
+ 569   5                      }
+ 570   4                      SPI_Write_Reg(CH_NO|0X20, ch);
+ 571   4      
+ 572   4                      tmp_cnt --;
+ 573   4                      if(tmp_cnt == 0){
+ 574   5                          BLE_Mode_PwrDn();
+ 575   5                          break; //exit from while(1)
+ 576   5                      }
+ 577   4                      else
+ 578   4                          BLE_Mode_Wakeup();
+ 579   4                  }
+ 580   3      
+ 581   3              }
+ 582   2              else if(tick == 0){ //robustness, in case no int
+ 583   3                  BLE_Mode_Sleep();
+ 584   3              }
+ 585   2      
+ 586   2          }
+ 587   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1875    ----
+   CONSTANT SIZE    =      8    ----
+   XDATA SIZE       =     73      61
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
