@@ -30,6 +30,7 @@ void qma6981_initialize(void)
 	IIC_Send_Byte(0x36, 0xb6);
 	qma6981_delay(5*1000);
 	IIC_Send_Byte(0x36, 0x00);
+#if 0
 	IIC_Send_Byte(0x11, 0x80);
 	IIC_Send_Byte(0x0f, 0x04);//QMAX981_RANGE_8G
 	IIC_Send_Byte(0x10, 0x2a);
@@ -42,6 +43,21 @@ void qma6981_initialize(void)
 	IIC_Send_Byte(0x27, QMA6981_OFFSET);//QMA6981_OFFSET
 	IIC_Send_Byte(0x28, QMA6981_OFFSET);
 	IIC_Send_Byte(0x29, QMA6981_OFFSET);
+#else
+	IIC_Send_Byte(0x0f, 0x04);//QMAX981_RANGE_8G
+	IIC_Send_Byte(0x10, 0x07);
+	IIC_Send_Byte(0x11, 0xcb);
+	IIC_Send_Byte(0x12, 0x8f);
+	IIC_Send_Byte(0x13, 0x12);
+	IIC_Send_Byte(0x14, 0x0d);
+	IIC_Send_Byte(0x15, 0x14);	// 0x0a
+	
+	IIC_Send_Byte(0x16, 0x0c);
+	IIC_Send_Byte(0x32, 0x01);//0x02
+	IIC_Send_Byte(0x27, QMA6981_OFFSET);//QMA6981_OFFSET
+	IIC_Send_Byte(0x28, QMA6981_OFFSET);
+	IIC_Send_Byte(0x29, QMA6981_OFFSET);
+#endif
 	qma6981_delay(1*1000);
 }
 
