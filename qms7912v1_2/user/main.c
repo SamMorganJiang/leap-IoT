@@ -9,6 +9,10 @@
 #include "I2C_SLAVE.h"
 #include "Test_Prom.h"
 
+sbit LED1 = P1^7;
+sbit LED2 = P1^6;
+sbit KEY  = P3^4;
+
 unsigned char data bufdat = 0;				//用于存放和接受数据
 unsigned char data bufflag = 0;
 unsigned char data str[4];
@@ -18,12 +22,13 @@ void RCT_Init(void);
 void UART_Init(void);
 void System_init(void);
 void IO_Init();
+void delay_by_ms(unsigned int timdlay);
 
 void Delay_us(u32 delayCnt)
 {
 	u32 temp0 =0;
-	for(temp0 =0; temp0 < delayCnt;temp0++)
-	{
+
+	for(temp0 =0; temp0 < delayCnt;temp0++) {
         _nop_();
         _nop_();
         _nop_();
@@ -36,40 +41,48 @@ void Delay_us(u32 delayCnt)
 void Delay_ms(u32 delayCnt)
 {
 	u32 temp0 =0;
-	for(temp0 =0; temp0 < delayCnt;temp0++)
-	{
+
+	for(temp0 =0; temp0 < delayCnt;temp0++) {
         Delay_us(1132);
 	}
 }
 
-
 void main(void)
 {
 	unsigned short step_num = 0;
+
 	System_init();	   					//系统初始化
 	IO_Init();							//IO初始化
 	RCT_Init();							//RTC初始化
-	//UART_Init();
-	SPI_Init();            //SPI初始化
+	SPI_Init();                         //SPI初始化
 	IIC_Init();
+	//UART_Init();
 	//ES1 = 1;	 						//开串口中断
+
+	while(1) {
+		if (KEY == 1) {
+			Delay_ms(30);
+			if (KEY == 1) {
+				LED1 = ~LED1;
+				LED2 = ~LED2;
+			}
+		}
+	}
 
 	ERTC=0;								//disable RTC中断
 	EA = 1;								//使能总中断
 
-	if(qmaX981_get_chip_id())
-	{
+	if(qmaX981_get_chip_id()) {
 		qma6981_initialize();
 	}
 	BLE_Init();
-	while(1)
-	{
+
+	while(1) {
 		//////ble rtx api
 		//txcnt=100; //txcnt=0 is for rx only application
 		//rxcnt=20; //rxcnt=0 is for tx only application
 		//qma6981_read_raw_xyz();
-		if(rtc_count == 0)
-		{
+		if(rtc_count == 0) {
 			ERTC=0; 							//disable RTC中断
 			step_num = qmaX981_step_c_read_stepCounter();
 			//BLE_Set_rxtxcnt(100, 20);
@@ -84,6 +97,20 @@ void main(void)
 			// yangzhiqiang
 		}
 	}
+}
+
+/***************************************************************************************
+  * @说明  	延时函数
+  * @参数  	timdlay ：延时设定值
+  *			取值范围: 1 - 65536.
+  * @返回值 无
+  * @注		粗略延时
+***************************************************************************************/
+void delay_by_ms(unsigned int timdlay)
+{
+	unsigned char j;
+	for(;timdlay>0;timdlay--)
+	for(j=100;j>0;j--);
 }
 
 /***************************************************************************************
@@ -184,9 +211,13 @@ unsigned char* CharToString(unsigned char n)
  ***************************************************************************************/
 void IO_Init(void)
 {
-	//P0M0=0x82; 							//P00????,P01????
-	//P0M0 = 0x88;						//P00，P01设置为推挽输出
-		P5M2 = 0x00;
+	P5M2 = 0x00;
+
+	P1M3 = 0xCC;                        //LED1、2推挽输出( IO 驱动电流 Low Drive Mode)
+	LED1 = LED2 = 0;
+
+	P3M2 &= 0xF0;
+	P3M2 |= 0x05;                       //KEY 带下拉输入(SMT)
 }
 
 /***************************************************************************************
@@ -206,7 +237,6 @@ void UART_Init(void)
 	SCON2 = 0x12;						//?????
 	SCON |= 0X10; 						//?????
 }
-
 
 /***************************************************************************************
   * @?μ?÷  	RTC?D??·t??oˉêy
