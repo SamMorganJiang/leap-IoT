@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   QMA6981                                                           08/01/2018 14:08:12 PAGE 1   
+C51 COMPILER V9.56.0.0   QMA6981                                                           09/20/2018 14:28:36 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE QMA6981
@@ -40,102 +40,118 @@ line level    source
   30   1              IIC_Send_Byte(0x36, 0xb6);
   31   1              qma6981_delay(5*1000);
   32   1              IIC_Send_Byte(0x36, 0x00);
-  33   1              IIC_Send_Byte(0x11, 0x80);
-  34   1              IIC_Send_Byte(0x0f, 0x04);//QMAX981_RANGE_8G
-  35   1              IIC_Send_Byte(0x10, 0x2a);
-  36   1              IIC_Send_Byte(0x12, 0x8f);
-  37   1              IIC_Send_Byte(0x13, 0x10);
-  38   1              IIC_Send_Byte(0x14, 0x14);
-  39   1              IIC_Send_Byte(0x15, 0x10);      
-  40   1              IIC_Send_Byte(0x16, 0x0c);
-  41   1              IIC_Send_Byte(0x32, 0x01);//0x02
-  42   1              IIC_Send_Byte(0x27, QMA6981_OFFSET);//QMA6981_OFFSET
-  43   1              IIC_Send_Byte(0x28, QMA6981_OFFSET);
-  44   1              IIC_Send_Byte(0x29, QMA6981_OFFSET);
-  45   1              qma6981_delay(1*1000);
-  46   1      }
-  47          
-  48          unsigned char qmaX981_get_chip_id(void)
-  49          {
-  50   1              unsigned char  ret;
-  51   1              unsigned char  chip_id ;
-  52   1              
-  53   1                IIC_Send_Byte(0x11,0x80);
-  54   1          qma6981_delay(2);
-C51 COMPILER V9.56.0.0   QMA6981                                                           08/01/2018 14:08:12 PAGE 2   
+  33   1      #if 0
+                      IIC_Send_Byte(0x11, 0x80);
+                      IIC_Send_Byte(0x0f, 0x04);//QMAX981_RANGE_8G
+                      IIC_Send_Byte(0x10, 0x2a);
+                      IIC_Send_Byte(0x12, 0x8f);
+                      IIC_Send_Byte(0x13, 0x10);
+                      IIC_Send_Byte(0x14, 0x14);
+                      IIC_Send_Byte(0x15, 0x10);      
+                      IIC_Send_Byte(0x16, 0x0c);
+                      IIC_Send_Byte(0x32, 0x01);//0x02
+                      IIC_Send_Byte(0x27, QMA6981_OFFSET);//QMA6981_OFFSET
+                      IIC_Send_Byte(0x28, QMA6981_OFFSET);
+                      IIC_Send_Byte(0x29, QMA6981_OFFSET);
+              #else
+  47   1              IIC_Send_Byte(0x0f, 0x04);//QMAX981_RANGE_8G
+  48   1              IIC_Send_Byte(0x10, 0x07);
+  49   1              IIC_Send_Byte(0x11, 0xcb);
+  50   1              IIC_Send_Byte(0x12, 0x8f);
+  51   1              IIC_Send_Byte(0x13, 0x12);
+  52   1              IIC_Send_Byte(0x14, 0x0d);
+  53   1              IIC_Send_Byte(0x15, 0x14);      // 0x0a
+  54   1              
+C51 COMPILER V9.56.0.0   QMA6981                                                           09/20/2018 14:28:36 PAGE 2   
 
-  55   1                chip_id = (unsigned char) IIC_Read_Byte(0x00);
-  56   1                 //SendChar(chip_id);
-  57   1              if((chip_id>=0xb0) && (chip_id<=0xb6))
-  58   1              {
-  59   2                      ret = 1;
-  60   2              }
-  61   1              else
-  62   1              {
-  63   2                ret = 0;
-  64   2              }
-  65   1              return ret;
-  66   1      }
-  67          
-  68          void qma6981_read_raw_xyz(void)
-  69          {
-  70   1              unsigned char  buf[6] = {0};
-  71   1              short acc[3];
-  72   1              int x_out,y_out,z_out;
-  73   1              unsigned char  i;       
-  74   1      
-  75   1      
-  76   1              buf[0] = IIC_Read_Byte(0x01);   
-  77   1              buf[1] = IIC_Read_Byte(0x02);
-  78   1              buf[2] = IIC_Read_Byte(0x03);
-  79   1              buf[3] = IIC_Read_Byte(0x04);
-  80   1              buf[4] = IIC_Read_Byte(0x05);
-  81   1              buf[5] = IIC_Read_Byte(0x06);
-  82   1      
-  83   1              acc[0]  = (short)((buf[1]<<2) |( buf[0]>>6));
-  84   1              acc[1]  = (short)((buf[3]<<2) |( buf[2]>>6));
-  85   1              acc[2]  = (short)((buf[5]<<2) |( buf[4]>>6));
-  86   1      
-  87   1              for(i=0;i<3;i++)                                
-  88   1              {       
-  89   2                      if ( acc[i] == 0x0200 ) 
-  90   2                              acc[i]= -512;   
-  91   2                      else if ( acc[i]&0x0200 )       
-  92   2                      {                               
-  93   3                              acc[i] -= 0x1;          
-  94   3                              acc[i] = ~acc[i];               
-  95   3                              acc[i] &= 0x01ff;               
-  96   3                              acc[i] = -acc[i];               
-  97   3                      }
-  98   2                      acc[i] -= QMA6981_OFFSET;
-  99   2              }
- 100   1              
- 101   1              x_out = (int)(acc[0]*9807)/(64);//8G 1024 //4G 2048
- 102   1              y_out = (int)(acc[1]*9807)/(64);
- 103   1              z_out = (int)(acc[2]*9807)/(64);
- 104   1      }
- 105          
- 106          void qmaX981_reset_sc(void)
- 107          {
- 108   1              unsigned char  value_13;
- 109   1              value_13= IIC_Read_Byte(0x13);
- 110   1              IIC_Send_Byte(0x13,0x80);
- 111   1        IIC_Send_Byte(0x13,value_13);
- 112   1      }
- 113          
- 114          unsigned short qmaX981_step_c_read_stepCounter(void)
- 115          {
- 116   1              unsigned char  buf[2];
-C51 COMPILER V9.56.0.0   QMA6981                                                           08/01/2018 14:08:12 PAGE 3   
+  55   1              IIC_Send_Byte(0x16, 0x0c);
+  56   1              IIC_Send_Byte(0x32, 0x01);//0x02
+  57   1              IIC_Send_Byte(0x27, QMA6981_OFFSET);//QMA6981_OFFSET
+  58   1              IIC_Send_Byte(0x28, QMA6981_OFFSET);
+  59   1              IIC_Send_Byte(0x29, QMA6981_OFFSET);
+  60   1      #endif
+  61   1              qma6981_delay(1*1000);
+  62   1      }
+  63          
+  64          unsigned char qmaX981_get_chip_id(void)
+  65          {
+  66   1              unsigned char  ret;
+  67   1              unsigned char  chip_id ;
+  68   1              
+  69   1                IIC_Send_Byte(0x11,0x80);
+  70   1          qma6981_delay(2);
+  71   1                chip_id = (unsigned char) IIC_Read_Byte(0x00);
+  72   1                 //SendChar(chip_id);
+  73   1              if((chip_id>=0xb0) && (chip_id<=0xb6))
+  74   1              {
+  75   2                      ret = 1;
+  76   2              }
+  77   1              else
+  78   1              {
+  79   2                ret = 0;
+  80   2              }
+  81   1              return ret;
+  82   1      }
+  83          
+  84          void qma6981_read_raw_xyz(void)
+  85          {
+  86   1              unsigned char  buf[6] = {0};
+  87   1              short acc[3];
+  88   1              int x_out,y_out,z_out;
+  89   1              unsigned char  i;       
+  90   1      
+  91   1      
+  92   1              buf[0] = IIC_Read_Byte(0x01);   
+  93   1              buf[1] = IIC_Read_Byte(0x02);
+  94   1              buf[2] = IIC_Read_Byte(0x03);
+  95   1              buf[3] = IIC_Read_Byte(0x04);
+  96   1              buf[4] = IIC_Read_Byte(0x05);
+  97   1              buf[5] = IIC_Read_Byte(0x06);
+  98   1      
+  99   1              acc[0]  = (short)((buf[1]<<2) |( buf[0]>>6));
+ 100   1              acc[1]  = (short)((buf[3]<<2) |( buf[2]>>6));
+ 101   1              acc[2]  = (short)((buf[5]<<2) |( buf[4]>>6));
+ 102   1      
+ 103   1              for(i=0;i<3;i++)                                
+ 104   1              {       
+ 105   2                      if ( acc[i] == 0x0200 ) 
+ 106   2                              acc[i]= -512;   
+ 107   2                      else if ( acc[i]&0x0200 )       
+ 108   2                      {                               
+ 109   3                              acc[i] -= 0x1;          
+ 110   3                              acc[i] = ~acc[i];               
+ 111   3                              acc[i] &= 0x01ff;               
+ 112   3                              acc[i] = -acc[i];               
+ 113   3                      }
+ 114   2                      acc[i] -= QMA6981_OFFSET;
+ 115   2              }
+ 116   1              
+C51 COMPILER V9.56.0.0   QMA6981                                                           09/20/2018 14:28:36 PAGE 3   
 
- 117   1              unsigned short step;
- 118   1      
- 119   1              buf[0] = IIC_Read_Byte(0x07);
- 120   1              buf[1] = IIC_Read_Byte(0x08);
- 121   1              step = (unsigned short)((buf[1]<<8)|buf[0]);
- 122   1      
- 123   1              return step;
- 124   1      }
+ 117   1              x_out = (int)(acc[0]*9807)/(64);//8G 1024 //4G 2048
+ 118   1              y_out = (int)(acc[1]*9807)/(64);
+ 119   1              z_out = (int)(acc[2]*9807)/(64);
+ 120   1      }
+ 121          
+ 122          void qmaX981_reset_sc(void)
+ 123          {
+ 124   1              unsigned char  value_13;
+ 125   1              value_13= IIC_Read_Byte(0x13);
+ 126   1              IIC_Send_Byte(0x13,0x80);
+ 127   1        IIC_Send_Byte(0x13,value_13);
+ 128   1      }
+ 129          
+ 130          unsigned short qmaX981_step_c_read_stepCounter(void)
+ 131          {
+ 132   1              unsigned char  buf[2];
+ 133   1              unsigned short step;
+ 134   1      
+ 135   1              buf[0] = IIC_Read_Byte(0x07);
+ 136   1              buf[1] = IIC_Read_Byte(0x08);
+ 137   1              step = (unsigned short)((buf[1]<<8)|buf[0]);
+ 138   1      
+ 139   1              return step;
+ 140   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

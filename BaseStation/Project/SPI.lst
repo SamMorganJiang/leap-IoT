@@ -1,0 +1,176 @@
+C51 COMPILER V9.56.0.0   SPI                                                               09/26/2018 10:29:49 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE SPI
+OBJECT MODULE PLACED IN .\SPI.obj
+COMPILER INVOKED BY: C:\Keil_v5c51\C51\BIN\C51.EXE ..\user\SPI.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT
+                    -(.\SPI.lst) OBJECT(.\SPI.obj)
+
+line level    source
+
+   1          #include "HC89F0650.h"
+   2          #include "intrins.h"
+   3          #include "SPI.h"
+   4          #include "Timer.h"
+   5          #include "MG127.h"
+   6          #include "Uart.h"
+   7          
+   8          sbit    CSN=P0^0;                                                                               //P00???CS
+   9          sbit    SCK=P0^1;                                                                               //P03???SCK
+  10          sbit    IRQ=P4^2;                   //P05???IRQ
+  11          sbit    SI=P0^2;                                                                                //P02???SI
+  12          sbit    SO=P0^2;        
+  13          
+  14          
+  15          void SPI_Init(void)
+  16          {
+  17   1              P0M0=0xcc;      
+  18   1              P0M2=0x33;
+  19   1              P4M1 =0x80;
+  20   1              CSN =1;
+  21   1      }
+  22          
+  23          void SPI_Write_Byte(int data1) 
+  24          { 
+  25   1              int  i;
+  26   1              P0M1=0x6c;
+  27   1              for(i=0;i<8;i++)
+  28   1              {
+  29   2                      SCK = 0;
+  30   2                      _nop_();
+  31   2                      _nop_();
+  32   2                      if(data1&0x80)
+  33   2                      {
+  34   3                              SI = 1;
+  35   3                      }
+  36   2                      else
+  37   2                      {
+  38   3                              SI = 0;
+  39   3                      }
+  40   2      
+  41   2                      _nop_();
+  42   2                      _nop_();
+  43   2                      _nop_();
+  44   2                      _nop_();
+  45   2                      SCK = 1;
+  46   2                      data1<<=1;
+  47   2                      
+  48   2              }
+  49   1              SCK = 0;
+  50   1              SI = 1;
+  51   1      } 
+  52          
+  53          
+  54          u8 SPI_Read_Byte(void) 
+C51 COMPILER V9.56.0.0   SPI                                                               09/26/2018 10:29:49 PAGE 2   
+
+  55          { 
+  56   1              u8 ret = 0;
+  57   1              u8 i = 0;
+  58   1              
+  59   1               P0M1=0xc6;     
+  60   1              for(i=0;i<8;i++)
+  61   1              {
+  62   2                      SCK = 0;
+  63   2                      _nop_();
+  64   2                      _nop_();
+  65   2                      SCK = 1;
+  66   2                      ret<<=1;
+  67   2                      if(SI != 0)
+  68   2                      {
+  69   3                              ret|=1;
+  70   3                      }
+  71   2              }
+  72   1              P0M1=0x6c;      
+  73   1              SCK = 0;
+  74   1              return ret;
+  75   1      } 
+  76          
+  77           
+  78          
+  79          void SPI_Write_Reg(u8 reg, u8 datae)
+  80          { 
+  81   1              CSN = 0;
+  82   1              //delay(5);
+  83   1              SPI_Write_Byte(reg);
+  84   1              SPI_Write_Byte(datae);
+  85   1        //delay(5);
+  86   1              CSN = 1;
+  87   1      } 
+  88          
+  89          
+  90          u8 SPI_Read_Reg(u8 reg) 
+  91          { 
+  92   1              u8 data temp0=0;
+  93   1              
+  94   1          CSN = 0;
+  95   1              //delay(5);
+  96   1              SPI_Write_Byte(reg);
+  97   1              temp0 = SPI_Read_Byte();
+  98   1              //delay(5);
+  99   1              CSN = 1;
+ 100   1              return temp0;
+ 101   1      } 
+ 102          
+ 103          void SPI_Write_Buffer(u8 reg, u8 *dataBuf, u8 len) 
+ 104          { 
+ 105   1              u8 data temp0=0;
+ 106   1              
+ 107   1          CSN = 0;
+ 108   1              
+ 109   1              //delay(5);
+ 110   1              SPI_Write_Byte(reg|0x20);
+ 111   1      
+ 112   1              for(temp0=0;temp0<len;temp0++)
+ 113   1              {
+ 114   2                      SPI_Write_Byte(*dataBuf);
+ 115   2                      dataBuf++;
+ 116   2              }
+C51 COMPILER V9.56.0.0   SPI                                                               09/26/2018 10:29:49 PAGE 3   
+
+ 117   1              
+ 118   1              //delay(5);
+ 119   1      
+ 120   1              CSN = 1;
+ 121   1      } 
+ 122          
+ 123          void SPI_Read_Buffer(u8 reg, u8 *dataBuf, u8 len) 
+ 124          { 
+ 125   1          u8  temp0=0;
+ 126   1              
+ 127   1          CSN = 0;
+ 128   1              //delay(5);
+ 129   1              
+ 130   1              SPI_Write_Byte(reg);
+ 131   1      
+ 132   1              for(temp0=0;temp0<len;temp0++)
+ 133   1              {
+ 134   2                      //*(dataBuf+temp0)=SPI_Read_Byte();
+ 135   2                      dataBuf[temp0]=SPI_Read_Byte();
+ 136   2              }
+ 137   1              //delay(5);
+ 138   1      
+ 139   1              CSN = 1;
+ 140   1      }
+ 141          
+ 142          u8 mcu_get_irq(void)
+ 143          {
+ 144   1              if(IRQ == 0)
+ 145   1                      return 1;
+ 146   1              else
+ 147   1                      return 0;
+ 148   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    268    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----      10
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

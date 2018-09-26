@@ -28,6 +28,7 @@ unsigned short tick;
 u8 txcnt = 0;
 u8 rxcnt = 0;
 unsigned char rx_buf[39]; //include header(2B)+mac(6B)+data(max31B), for rx application
+unsigned char rx_filter[39];
 
 //BLE ADV_data, maxlen=31
 #define LEN_DATA 30
@@ -489,7 +490,6 @@ void BLE_TRX(void)
 
     if(tmp_cnt == 0) return;
 
-
     BLE_Mode_PwrUp();
 
 #if 1  //if adv_data no change, can move this block to the end of BLE_Init()
@@ -538,7 +538,6 @@ void BLE_TRX(void)
                     BLE_Set_StartTime(BLE_START_TIME);
                 }
                 continue; //goto while(1)
-
             }
 
             BLE_Mode_Sleep();
@@ -547,11 +546,11 @@ void BLE_TRX(void)
                 //LED_RED_ON(); //debug
                 BLE_Get_Pdu(rx_buf, &len_pdu);
 #if 1 //debug
-                //Uart_Send_String("\r\nRX: ");
-                  for(loop=0; loop<len_pdu; loop++){
-                    //Uart_Send_Byte(rx_buf[loop]);
-                    //Uart_Send_String(" ");
-                  }
+                if(rx_buf[8] == 0x02 && rx_buf[9] == 0x01 && rx_buf[10] == 0x04 && rx_buf[11] == 0x1a) {
+                    for(loop = 0; loop < len_pdu; loop++){
+                        rx_filter[loop] = rx_buf[loop];
+                    }
+			    }
 #endif
             }else if(INT_TYPE_TX_START & status){ //only happen in tx application
                 //LED_GREEN_ON(); //debug

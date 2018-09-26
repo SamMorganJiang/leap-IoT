@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   MAIN                                                              08/01/2018 14:08:11 PAGE 1   
+C51 COMPILER V9.56.0.0   MAIN                                                              09/20/2018 14:28:35 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
@@ -19,98 +19,311 @@ line level    source
    9          #include "I2C_SLAVE.h"
   10          #include "Test_Prom.h"
   11          
-  12          void System_init(void);
-  13          void IO_Init();
-  14          
-  15          void Delay_us(u32 delayCnt)
-  16          {
-  17   1              u32 temp0 =0;
-  18   1              for(temp0 =0; temp0 < delayCnt;temp0++)
-  19   1              {
-  20   2              _nop_();
-  21   2              _nop_();
-  22   2              _nop_();
-  23   2              _nop_();
-  24   2              _nop_();
-  25   2              _nop_();
-  26   2              }
-  27   1      }
-  28          
-  29          void Delay_ms(u32 delayCnt)
-  30          {
-  31   1              u32 temp0 =0;
-  32   1              for(temp0 =0; temp0 < delayCnt;temp0++)
-  33   1              {
-  34   2              Delay_us(1132);
-  35   2              }
-  36   1      }
-  37          
-  38          
-  39          void main(void)
-  40          {
-  41   1              unsigned short step_num = 0;
-  42   1              System_init();                                          //系统初始化
-  43   1              IO_Init();                                                      //IO初始化
-  44   1              SPI_Init();            //SPI初始化
-  45   1              IIC_Init();
-  46   1              //ES1 = 1;                                                      //开串口中断
-  47   1              EA = 1;                                                         //使能总中断
-  48   1      
-  49   1              if(qmaX981_get_chip_id())
-  50   1              {
-  51   2                      qma6981_initialize();
+  12          sbit LED1 = P1^7;
+  13          sbit LED2 = P1^6;
+  14          sbit KEY  = P3^4;
+  15          
+  16          unsigned char data bufdat = 0;                          //用于存放和接受数据
+  17          unsigned char data bufflag = 0;
+  18          unsigned char data str[4];
+  19          
+  20          unsigned int rtc_count = 0;
+  21          unsigned int flag_trx = 0;
+  22          
+  23          static u8 tx_cnt;
+  24          static u8 rx_cnt;
+  25          
+  26          void RCT_Init(void);
+  27          void UART_Init(void);
+  28          void System_init(void);
+  29          void IO_Init();
+  30          void delay_by_ms(unsigned int timdlay);
+  31          
+  32          void Delay_us(u32 delayCnt)
+  33          {
+  34   1              u32 temp0 =0;
+  35   1      
+  36   1              for(temp0 =0; temp0 < delayCnt;temp0++) {
+  37   2              _nop_();
+  38   2              _nop_();
+  39   2              _nop_();
+  40   2              _nop_();
+  41   2              _nop_();
+  42   2              _nop_();
+  43   2              }
+  44   1      }
+  45          
+  46          void Delay_ms(u32 delayCnt)
+  47          {
+  48   1              u32 temp0 =0;
+  49   1      
+  50   1              for(temp0 =0; temp0 < delayCnt;temp0++) {
+  51   2              Delay_us(1132);
   52   2              }
-  53   1              BLE_Init();
-  54   1              while(1)
-C51 COMPILER V9.56.0.0   MAIN                                                              08/01/2018 14:08:11 PAGE 2   
+  53   1      }
+  54          
+C51 COMPILER V9.56.0.0   MAIN                                                              09/20/2018 14:28:35 PAGE 2   
 
-  55   1              {
-  56   2                      //////ble rtx api
-  57   2                      //txcnt=100; //txcnt=0 is for rx only application
-  58   2                      //rxcnt=20; //rxcnt=0 is for tx only application
-  59   2                      //qma6981_read_raw_xyz();
-  60   2                      step_num = qmaX981_step_c_read_stepCounter();
-  61   2                      BLE_Set_rxtxcnt(100, 20);
-  62   2                      BLE_TRX();
-  63   2                      //Uart_Send_String("BLE trx done.\r\n");
-  64   2      
-  65   2                      //delay to set ble tx interval
-  66   2                      Delay_ms(100);
-  67   2              }
-  68   1      }
-  69          
-  70          /***************************************************************************************
-  71            * @说明       系统初始化
-  72            *     @参数   无
-  73            * @返回值 无
-  74            * @注         关闭看门狗以及时钟初始化
-  75          ***************************************************************************************/
-  76          void System_init(void)
-  77          {
-  78   1              WDTCCR = 0x00;                                          //关闭看门狗
-  79   1      
-  80   1              while((CLKCON&0x20)!=0x20);                     //等待内部高频晶振起振
-  81   1              CLKDIV = 0x02;                                          //CPU时钟2分频，确保在进行RC32分频时CPU时钟小于16M
-  82   1              CLKSWR &=~ 0x10;                                        //切换为内部高频时钟
-  83   1              while((CLKSWR&0x40)!=0x00);                     //等待内部高频切换完成
-  84   1              CLKDIV = 0x04;                                          //OSC时钟4分频
-  85   1      }
-  86          
-  87          void IO_Init()
-  88          {
-  89   1              P5M2 = 0x00;
-  90   1      }
+  55          void main(void)
+  56          {
+  57   1              unsigned short step_num = 0;
+  58   1      
+  59   1              System_init();                                          //系统初始化
+  60   1              IO_Init();                                                      //IO初始化
+  61   1              //RCT_Init();                                                   //RTC初始化
+  62   1              SPI_Init();                         //SPI初始化
+  63   1              IIC_Init();
+  64   1              //UART_Init();
+  65   1              //ES1 = 1;                                                      //开串口中断
+  66   1      
+  67   1              ERTC=0;                                                         //disable RTC中断
+  68   1              EA = 1;                                                         //使能总中断
+  69   1      
+  70   1              if (qmaX981_get_chip_id()) {
+  71   2                      qma6981_initialize();
+  72   2              }
+  73   1              BLE_Init();
+  74   1              LED2 = 1;
+  75   1              tx_cnt = 500; //txcnt=0 is for rx only application
+  76   1              rx_cnt = 0; //rxcnt=0 is for tx only application
+  77   1              while(1) {
+  78   2                      /*
+  79   2                      if (KEY == 1) {
+  80   2                              Delay_ms(30);
+  81   2                              if (KEY == 1 && flag_trx == 0) {     //tx mode
+  82   2                                      LED2 = 1;
+  83   2                                      flag_trx == 1;
+  84   2                                      tx_cnt = 500; //txcnt=0 is for rx only application
+  85   2                                      rx_cnt = 0; //rxcnt=0 is for tx only application
+  86   2                                      goto TX_MODE;
+  87   2                              }
+  88   2                              if (KEY == 1 && flag_trx == 1) {     //rx mode
+  89   2                                      LED2 = 0;
+  90   2                                      flag_trx == 0;
+  91   2                                      tx_cnt = 0; //txcnt=0 is for rx only application
+  92   2                                      rx_cnt = 500; //rxcnt=0 is for tx only application
+  93   2                                      goto RX_MODE;
+  94   2                              }
+  95   2                      }
+  96   2      */
+  97   2      TX_MODE:
+  98   2                      //if(rtc_count == 0) {
+  99   2                              ERTC=0;                                                         //disable RTC中断
+ 100   2                              //step_num = qmaX981_step_c_read_stepCounter();
+ 101   2                              BLE_Set_rxtxcnt(tx_cnt, rx_cnt);
+ 102   2                              BLE_TRX();
+ 103   2      
+ 104   2                              //delay to set ble tx interval
+ 105   2                              Delay_ms(100);
+ 106   2                              ERTC=1;                                                         //enable RTC中断
+ 107   2                              // add by yangzhiqiang enter power done mode
+ 108   2                              PCON |= 0x03;
+ 109   2                              // yangzhiqiang
+ 110   2                              LED1 = 0;
+ 111   2                      //}
+ 112   2                      continue;
+ 113   2      
+ 114   2      RX_MODE:
+ 115   2                      //if (!flag_trx) {
+ 116   2                              BLE_Set_rxtxcnt(tx_cnt, rx_cnt);
+C51 COMPILER V9.56.0.0   MAIN                                                              09/20/2018 14:28:35 PAGE 3   
+
+ 117   2                              BLE_TRX();
+ 118   2                      //}
+ 119   2              }
+ 120   1      }
+*** WARNING C280 IN LINE 97 OF ..\user\main.c: 'TX_MODE': unreferenced label
+*** WARNING C280 IN LINE 114 OF ..\user\main.c: 'RX_MODE': unreferenced label
+ 121          
+ 122          /***************************************************************************************
+ 123            * @说明       延时函数
+ 124            * @参数       timdlay ：延时设定值
+ 125            *                     取值范围: 1 - 65536.
+ 126            * @返回值 无
+ 127            * @注         粗略延时
+ 128          ***************************************************************************************/
+ 129          void delay_by_ms(unsigned int timdlay)
+ 130          {
+ 131   1              unsigned char j;
+ 132   1              for(;timdlay>0;timdlay--)
+ 133   1                      for(j=100;j>0;j--);
+ 134   1      }
+ 135          
+ 136          /***************************************************************************************
+ 137            * @说明       系统初始化
+ 138            *     @参数   无
+ 139            * @返回值 无
+ 140            * @注         关闭看门狗以及时钟初始化
+ 141          ***************************************************************************************/
+ 142          void System_init(void)
+ 143          {
+ 144   1              WDTCCR = 0x00;                                          //关闭看门狗
+ 145   1      
+ 146   1              while((CLKCON&0x20)!=0x20);                     //等待内部高频晶振起振
+ 147   1              CLKDIV = 0x02;                                          //CPU时钟2分频，确保在进行RC32分频时CPU时钟小于16M
+ 148   1              CLKSWR &=~ 0x10;                                        //切换为内部高频时钟
+ 149   1              while((CLKSWR&0x40)!=0x00);                     //等待内部高频切换完成
+ 150   1              CLKDIV = 0x04;                                          //OSC时钟4分频
+ 151   1      }
+ 152          
+ 153          void Usart_Ipt() interrupt UART1_VECTOR
+ 154          {
+ 155   1              if (SCON&0x01) {
+ 156   2                      SCON &=~ 0x01;                                  //?????,??????
+ 157   2                      bufdat = SBUF & 0x0f;                   //????(???4?)
+ 158   2                      bufflag = 1;
+ 159   2                      SCON &=~ 0x10;                                  //?????
+ 160   2                      ES1 = 0;                                                //?????
+ 161   2              }
+ 162   1      }
+ 163          
+ 164          /***************************************************************************************
+ 165           * @??          ?????
+ 166           * @??  ?
+ 167           * @???  ?
+ 168           * @?           ????????????
+ 169           ***************************************************************************************/
+ 170          
+ 171          void SendChar(unsigned char Char)
+ 172          {
+ 173   1              SBUF = Char;
+ 174   1              while(!(SCON&0x02));
+ 175   1              SCON &=~ 0x02;                          //????????????0
+ 176   1      }
+C51 COMPILER V9.56.0.0   MAIN                                                              09/20/2018 14:28:35 PAGE 4   
+
+ 177          
+ 178          void SendString(unsigned char *p)
+ 179          {
+ 180   1              while(*p) {
+ 181   2                      SendChar(*p);
+ 182   2                      p++;
+ 183   2              }
+ 184   1      }
+ 185          
+ 186          unsigned char* CharToHexStr(unsigned char n)
+ 187          {
+ 188   1              unsigned char *pstr;
+ 189   1      
+ 190   1              pstr = str;
+ 191   1              *pstr = n / 16 + '0';
+ 192   1              if (*pstr > '9')
+ 193   1                      *pstr += 39;
+ 194   1      
+ 195   1              *++pstr = n % 16 + '0';
+ 196   1              if (*pstr > '9')
+ 197   1                      *pstr += 39;
+ 198   1      
+ 199   1              *(++pstr) = '\0';
+ 200   1              return str;
+ 201   1      }
+ 202          
+ 203          unsigned char* CharToString(unsigned char n)
+ 204          {
+ 205   1              unsigned char *pstr;
+ 206   1      
+ 207   1              pstr = str;
+ 208   1              if (n > 99) {
+ 209   2                      *pstr++ = n/100 + '0';
+ 210   2                      n %= 100;
+ 211   2                      *pstr++ = n/10 + '0';
+ 212   2                      n %= 10;
+ 213   2                      *pstr = n + '0';
+ 214   2              } else if (n > 9) {
+ 215   2                      *pstr++ = n/10 + '0';
+ 216   2                      n %= 10;
+ 217   2                      *pstr = n + '0';
+ 218   2              } else {
+ 219   2                      *pstr = n + '0';
+ 220   2              }
+ 221   1      
+ 222   1              *(++pstr) = '\0';
+ 223   1              return str;
+ 224   1      }
+ 225          
+ 226          /***************************************************************************************
+ 227           * @??          IO???
+ 228           * @??  ?
+ 229           * @???  ?
+ 230           * @?           P00????,P01????
+ 231           ***************************************************************************************/
+ 232          void IO_Init(void)
+ 233          {
+ 234   1              P5M2 = 0x00;
+ 235   1      
+ 236   1              P1M3 = 0xCC;                        //LED1、2推挽输出( IO 驱动电流 Low Drive Mode)
+ 237   1              LED1 = LED2 = 0;
+ 238   1      
+C51 COMPILER V9.56.0.0   MAIN                                                              09/20/2018 14:28:35 PAGE 5   
+
+ 239   1              P3M2 &= 0xF0;
+ 240   1              P3M2 |= 0x05;                       //KEY 带下拉输入(SMT)
+ 241   1      }
+ 242          
+ 243          /***************************************************************************************
+ 244           * @??          UART???
+ 245           * @??  ?
+ 246           * @???  ?
+ 247           * @?           8?????,???1200
+ 248           ***************************************************************************************/
+ 249          void UART_Init(void)
+ 250          {
+ 251   1              P1M3 = 0x82;
+ 252   1              TXD_MAP = 0x0F;                                         //TXD??P17
+ 253   1              RXD_MAP = 0x0E;                                         //RXD??P16
+ 254   1      
+ 255   1              SBRTH = 0xFE5F/256;
+ 256   1              SBRTL = 0xFE5F%256;
+ 257   1              SCON2 = 0x12;                                           //?????
+ 258   1              SCON |= 0X10;                                           //?????
+ 259   1      }
+ 260          
+ 261          /***************************************************************************************
+ 262            * @?μ?÷     RTC?D??·t??oˉêy
+ 263            *     @2?êy  ?T
+ 264            * @·μ???μ ?T
+ 265            * @×￠               ?T
+ 266          ***************************************************************************************/
+ 267          void Rtc_Irt()interrupt RTC_VECTOR
+ 268          {
+ 269   1      //      P0_1 =! P0_1;                                      //P01·-×a
+ 270   1              rtc_count++;
+ 271   1              RTCC &= ~0x80;                                     //??3y?D??±ê????
+ 272   1              if (rtc_count >= 3) {
+ 273   2                      //LED1 = 1;
+ 274   2                      rtc_count = 0;
+ 275   2                      ERTC=0;                                                         //disable RTC中断
+ 276   2                      PCON &= (~0x03);
+ 277   2              }
+ 278   1      }
+ 279          
+ 280          /***************************************************************************************
+ 281            * @?μ?÷     RTC3?ê??ˉ
+ 282            *     @2?êy  ?T
+ 283            * @·μ???μ ?T
+ 284            * @×￠               ê1?üRTC?D??ò??°RTCê?3?￡??D??ê±??1s
+ 285          ***************************************************************************************/
+ 286          void RCT_Init(void)
+ 287          {
+ 288   1              CLKCON |= 0x04;                                         //使能外部晶振
+ 289   1              while((CLKCON&0x40)!=0x40);                     //等待外部低频晶振起振
+ 290   1              //RTCC = 0x13;                                          //RTC中断时间1s,允许RTC时钟输出
+ 291   1              RTCC = 0x1f;                                            //RTC中断时间8s,允许RTC时钟输出
+ 292   1              RTCO_MAP = 0x03;                                        //RCT时钟输出映射P0.3口
+ 293   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    305    ----
+   CODE SIZE        =    833    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =   ----      18
+   XDATA SIZE       =      6      24
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----    ----
+C51 COMPILER V9.56.0.0   MAIN                                                              09/20/2018 14:28:35 PAGE 6   
+
+   DATA SIZE        =      6    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)

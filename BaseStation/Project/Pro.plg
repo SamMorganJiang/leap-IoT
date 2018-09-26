@@ -1,0 +1,1284 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Project:</h2>
+D:\Working\2018\QMS7912\QMS7912V1.2-Test\Project\Pro.uvproj
+Project File Date:  07/15/2018
+
+<h2>Output:</h2>
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(93): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(101): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(73): warning C294: unreachable code
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5161
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 7 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5161 bytes programmed.
+Flash Verify Done: 5161 bytes verified.
+Program Option Done
+Verify Option Done
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5161 bytes programmed.
+Flash Verify Done: 5161 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling SPI.c...
+..\user\SPI.c(41): warning C231: 'rx_buf': redefinition
+..\user\SPI.c(345): warning C235: parameter 1: different types
+..\user\SPI.c(352): warning C235: parameter 1: different types
+..\user\SPI.c(352): warning C235: parameter 2: different types
+..\user\SPI.c(671): warning C280: 'BLE_Test_Case': unreferenced local variable
+..\user\SPI.c(671): warning C280: 'BLE_Test_Ruslt': unreferenced local variable
+..\user\SPI.c(679): warning C280: 'flag': unreferenced local variable
+..\user\SPI.c(683): warning C280: 'out_break': unreferenced local variable
+..\user\SPI.c(729): warning C280: 'out_break': unreferenced local variable
+..\user\SPI.c(766): warning C280: 'flag': unreferenced local variable
+..\user\SPI.c(770): warning C280: 'out_break': unreferenced local variable
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5161
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 13 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5161
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 2 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5161 bytes programmed.
+Flash Verify Done: 5161 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling SPI.c...
+..\user\SPI.c(41): warning C231: 'rx_buf': redefinition
+..\user\SPI.c(345): warning C235: parameter 1: different types
+..\user\SPI.c(352): warning C235: parameter 1: different types
+..\user\SPI.c(352): warning C235: parameter 2: different types
+..\user\SPI.c(671): warning C280: 'BLE_Test_Case': unreferenced local variable
+..\user\SPI.c(671): warning C280: 'BLE_Test_Ruslt': unreferenced local variable
+..\user\SPI.c(679): warning C280: 'flag': unreferenced local variable
+..\user\SPI.c(683): warning C280: 'out_break': unreferenced local variable
+..\user\SPI.c(729): warning C280: 'out_break': unreferenced local variable
+..\user\SPI.c(766): warning C280: 'flag': unreferenced local variable
+..\user\SPI.c(770): warning C280: 'out_break': unreferenced local variable
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5160
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 13 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5160 bytes programmed.
+Flash Verify Done: 5160 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling SPI.c...
+..\user\SPI.c(41): warning C231: 'rx_buf': redefinition
+..\user\SPI.c(345): warning C235: parameter 1: different types
+..\user\SPI.c(352): warning C235: parameter 1: different types
+..\user\SPI.c(352): warning C235: parameter 2: different types
+..\user\SPI.c(671): warning C280: 'BLE_Test_Case': unreferenced local variable
+..\user\SPI.c(671): warning C280: 'BLE_Test_Ruslt': unreferenced local variable
+..\user\SPI.c(679): warning C280: 'flag': unreferenced local variable
+..\user\SPI.c(683): warning C280: 'out_break': unreferenced local variable
+..\user\SPI.c(729): warning C280: 'out_break': unreferenced local variable
+..\user\SPI.c(766): warning C280: 'flag': unreferenced local variable
+..\user\SPI.c(770): warning C280: 'out_break': unreferenced local variable
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5167
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 13 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5167 bytes programmed.
+Flash Verify Done: 5167 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(93): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(101): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(82): warning C294: unreachable code
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+Program Size: data=50.0 xdata=377 code=4689
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 6 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4689 bytes programmed.
+Flash Verify Done: 4689 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(93): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(101): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(82): warning C294: unreachable code
+compiling SPI.c...
+..\user\SPI.c(41): warning C231: 'rx_buf': redefinition
+..\user\SPI.c(345): warning C235: parameter 1: different types
+..\user\SPI.c(352): warning C235: parameter 1: different types
+..\user\SPI.c(352): warning C235: parameter 2: different types
+..\user\SPI.c(671): warning C280: 'BLE_Test_Case': unreferenced local variable
+..\user\SPI.c(671): warning C280: 'BLE_Test_Ruslt': unreferenced local variable
+..\user\SPI.c(679): warning C280: 'flag': unreferenced local variable
+..\user\SPI.c(683): warning C280: 'out_break': unreferenced local variable
+..\user\SPI.c(729): warning C280: 'out_break': unreferenced local variable
+..\user\SPI.c(766): warning C280: 'flag': unreferenced local variable
+..\user\SPI.c(770): warning C280: 'out_break': unreferenced local variable
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+Program Size: data=50.0 xdata=377 code=4690
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 17 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4690 bytes programmed.
+Flash Verify Done: 4690 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+Program Size: data=50.0 xdata=377 code=4690
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 1 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4690 bytes programmed.
+Flash Verify Done: 4690 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling SPI.c...
+..\user\SPI.c(41): warning C231: 'rx_buf': redefinition
+..\user\SPI.c(345): warning C235: parameter 1: different types
+..\user\SPI.c(352): warning C235: parameter 1: different types
+..\user\SPI.c(352): warning C235: parameter 2: different types
+..\user\SPI.c(672): warning C280: 'BLE_Test_Case': unreferenced local variable
+..\user\SPI.c(672): warning C280: 'BLE_Test_Ruslt': unreferenced local variable
+..\user\SPI.c(680): warning C280: 'flag': unreferenced local variable
+..\user\SPI.c(684): warning C280: 'out_break': unreferenced local variable
+..\user\SPI.c(730): warning C280: 'out_break': unreferenced local variable
+..\user\SPI.c(767): warning C280: 'flag': unreferenced local variable
+..\user\SPI.c(771): warning C280: 'out_break': unreferenced local variable
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+Program Size: data=50.0 xdata=377 code=4691
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 12 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4691 bytes programmed.
+Flash Verify Done: 4691 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(93): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(101): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(73): warning C294: unreachable code
+compiling SPI.c...
+..\user\SPI.c(41): warning C231: 'rx_buf': redefinition
+..\user\SPI.c(345): warning C235: parameter 1: different types
+..\user\SPI.c(352): warning C235: parameter 1: different types
+..\user\SPI.c(352): warning C235: parameter 2: different types
+..\user\SPI.c(672): warning C280: 'BLE_Test_Case': unreferenced local variable
+..\user\SPI.c(672): warning C280: 'BLE_Test_Ruslt': unreferenced local variable
+..\user\SPI.c(680): warning C280: 'flag': unreferenced local variable
+..\user\SPI.c(684): warning C280: 'out_break': unreferenced local variable
+..\user\SPI.c(730): warning C280: 'out_break': unreferenced local variable
+..\user\SPI.c(767): warning C280: 'flag': unreferenced local variable
+..\user\SPI.c(771): warning C280: 'out_break': unreferenced local variable
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5167
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 18 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5167 bytes programmed.
+Flash Verify Done: 5167 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(93): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(101): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(73): warning C294: unreachable code
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5164
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 7 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5164 bytes programmed.
+Flash Verify Done: 5164 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(93): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(101): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(73): warning C294: unreachable code
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 025BH
+Program Size: data=48.0 xdata=354 code=5146
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 7 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5146 bytes programmed.
+Flash Verify Done: 5146 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(93): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(101): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(73): warning C294: unreachable code
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5164
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 7 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5164 bytes programmed.
+Flash Verify Done: 5164 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5164
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 2 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5164 bytes programmed.
+Flash Verify Done: 5164 bytes verified.
+Program Option Done
+Verify Option Done
+*****error: 初始化系统出错！请检查是否硬件设置有错误！
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5164 bytes programmed.
+Flash Verify Done: 5164 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5164
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 2 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5164 bytes programmed.
+Flash Verify Done: 5164 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(93): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(101): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(73): warning C294: unreachable code
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5167
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 7 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5167 bytes programmed.
+Flash Verify Done: 5167 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling SPI.c...
+..\user\SPI.c(41): warning C231: 'rx_buf': redefinition
+..\user\SPI.c(345): warning C235: parameter 1: different types
+..\user\SPI.c(352): warning C235: parameter 1: different types
+..\user\SPI.c(352): warning C235: parameter 2: different types
+..\user\SPI.c(672): warning C280: 'BLE_Test_Case': unreferenced local variable
+..\user\SPI.c(672): warning C280: 'BLE_Test_Ruslt': unreferenced local variable
+..\user\SPI.c(680): warning C280: 'flag': unreferenced local variable
+..\user\SPI.c(684): warning C280: 'out_break': unreferenced local variable
+..\user\SPI.c(730): warning C280: 'out_break': unreferenced local variable
+..\user\SPI.c(767): warning C280: 'flag': unreferenced local variable
+..\user\SPI.c(771): warning C280: 'out_break': unreferenced local variable
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5160
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 13 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5160 bytes programmed.
+Flash Verify Done: 5160 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(93): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(101): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(82): warning C294: unreachable code
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+Program Size: data=50.0 xdata=377 code=4683
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 6 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4683 bytes programmed.
+Flash Verify Done: 4683 bytes verified.
+Program Option Done
+Verify Option Done
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4683 bytes programmed.
+Flash Verify Done: 4683 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+Program Size: data=50.0 xdata=377 code=4683
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 1 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4683 bytes programmed.
+Flash Verify Done: 4683 bytes verified.
+Program Option Done
+Verify Option Done
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4683 bytes programmed.
+Flash Verify Done: 4683 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(93): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(101): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(73): warning C294: unreachable code
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5160
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 7 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5160 bytes programmed.
+Flash Verify Done: 5160 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(93): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(101): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(82): warning C294: unreachable code
+compiling SPI.c...
+..\user\SPI.c(41): warning C231: 'rx_buf': redefinition
+..\user\SPI.c(345): warning C235: parameter 1: different types
+..\user\SPI.c(352): warning C235: parameter 1: different types
+..\user\SPI.c(352): warning C235: parameter 2: different types
+..\user\SPI.c(672): warning C280: 'BLE_Test_Case': unreferenced local variable
+..\user\SPI.c(672): warning C280: 'BLE_Test_Ruslt': unreferenced local variable
+..\user\SPI.c(680): warning C280: 'flag': unreferenced local variable
+..\user\SPI.c(684): warning C280: 'out_break': unreferenced local variable
+..\user\SPI.c(730): warning C280: 'out_break': unreferenced local variable
+..\user\SPI.c(767): warning C280: 'flag': unreferenced local variable
+..\user\SPI.c(771): warning C280: 'out_break': unreferenced local variable
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+Program Size: data=50.0 xdata=377 code=4684
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 17 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4684 bytes programmed.
+Flash Verify Done: 4684 bytes verified.
+Program Option Done
+Verify Option Done
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4684 bytes programmed.
+Flash Verify Done: 4684 bytes verified.
+Program Option Done
+Verify Option Done
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4684 bytes programmed.
+Flash Verify Done: 4684 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+Program Size: data=50.0 xdata=377 code=4684
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 1 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4684 bytes programmed.
+Flash Verify Done: 4684 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(93): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(101): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(82): warning C294: unreachable code
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+Program Size: data=50.0 xdata=377 code=4684
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 6 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4684 bytes programmed.
+Flash Verify Done: 4684 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+Program Size: data=50.0 xdata=377 code=4684
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 1 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4684 bytes programmed.
+Flash Verify Done: 4684 bytes verified.
+Program Option Done
+Verify Option Done
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4684 bytes programmed.
+Flash Verify Done: 4684 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(94): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(102): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(74): warning C294: unreachable code
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5161
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 7 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5161 bytes programmed.
+Flash Verify Done: 5161 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(94): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(102): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(83): warning C294: unreachable code
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+Program Size: data=50.0 xdata=377 code=4684
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 6 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4684 bytes programmed.
+Flash Verify Done: 4684 bytes verified.
+Program Option Done
+Verify Option Done
+power downing ,please wait...
+power downing ,please wait...
+power downing ,please wait...
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(94): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(102): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(74): warning C294: unreachable code
+compiling SPI.c...
+..\user\SPI.c(41): warning C231: 'rx_buf': redefinition
+..\user\SPI.c(345): warning C235: parameter 1: different types
+..\user\SPI.c(352): warning C235: parameter 1: different types
+..\user\SPI.c(352): warning C235: parameter 2: different types
+..\user\SPI.c(672): warning C280: 'BLE_Test_Case': unreferenced local variable
+..\user\SPI.c(672): warning C280: 'BLE_Test_Ruslt': unreferenced local variable
+..\user\SPI.c(680): warning C280: 'flag': unreferenced local variable
+..\user\SPI.c(684): warning C280: 'out_break': unreferenced local variable
+..\user\SPI.c(730): warning C280: 'out_break': unreferenced local variable
+..\user\SPI.c(767): warning C280: 'flag': unreferenced local variable
+..\user\SPI.c(771): warning C280: 'out_break': unreferenced local variable
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5160
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 18 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5160 bytes programmed.
+Flash Verify Done: 5160 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(94): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(102): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(74): warning C294: unreachable code
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5160
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 7 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5160 bytes programmed.
+Flash Verify Done: 5160 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(94): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(102): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(74): warning C294: unreachable code
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5159
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 7 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5159 bytes programmed.
+Flash Verify Done: 5159 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling ADC.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\ADC.c(216): warning C280: 'valute': unreferenced local variable
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5153
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 5 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5153 bytes programmed.
+Flash Verify Done: 5153 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5153
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 2 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5153 bytes programmed.
+Flash Verify Done: 5153 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling ADC.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\ADC.c(216): warning C280: 'valute': unreferenced local variable
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5139
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 5 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5139 bytes programmed.
+Flash Verify Done: 5139 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(94): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(102): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(83): warning C294: unreachable code
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+Program Size: data=50.0 xdata=377 code=4662
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 6 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4662 bytes programmed.
+Flash Verify Done: 4662 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(96): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(104): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(85): warning C294: unreachable code
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+Program Size: data=51.0 xdata=406 code=4632
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 6 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4632 bytes programmed.
+Flash Verify Done: 4632 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+Program Size: data=51.0 xdata=406 code=4632
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 1 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4632 bytes programmed.
+Flash Verify Done: 4632 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(96): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(104): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(85): warning C294: unreachable code
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+Program Size: data=51.0 xdata=406 code=4633
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 6 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4633 bytes programmed.
+Flash Verify Done: 4633 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(96): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(104): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(85): warning C294: unreachable code
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+Program Size: data=51.0 xdata=406 code=4633
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 6 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+Program Size: data=51.0 xdata=406 code=4633
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 1 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4633 bytes programmed.
+Flash Verify Done: 4633 bytes verified.
+Program Option Done
+Verify Option Done
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4633 bytes programmed.
+Flash Verify Done: 4633 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(96): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(104): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(85): warning C294: unreachable code
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+Program Size: data=51.0 xdata=406 code=4633
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 6 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4633 bytes programmed.
+Flash Verify Done: 4633 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(94): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(102): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(83): warning C294: unreachable code
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+Program Size: data=50.0 xdata=377 code=4659
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 6 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4659 bytes programmed.
+Flash Verify Done: 4659 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(94): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(102): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(83): warning C294: unreachable code
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+Program Size: data=50.0 xdata=377 code=4662
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 6 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4662 bytes programmed.
+Flash Verify Done: 4662 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(95): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(103): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(84): warning C294: unreachable code
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+Program Size: data=50.0 xdata=377 code=4662
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 6 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+Program Size: data=50.0 xdata=377 code=4662
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 1 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4662 bytes programmed.
+Flash Verify Done: 4662 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(95): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(103): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(75): warning C294: unreachable code
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5139
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 7 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5139 bytes programmed.
+Flash Verify Done: 5139 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5139
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 2 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+*****error: 芯片连接失败！请检查芯片是否连接正常。
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(95): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(103): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(75): warning C294: unreachable code
+compiling SPI.c...
+..\user\SPI.c(41): warning C231: 'rx_buf': redefinition
+..\user\SPI.c(345): warning C235: parameter 1: different types
+..\user\SPI.c(352): warning C235: parameter 1: different types
+..\user\SPI.c(352): warning C235: parameter 2: different types
+..\user\SPI.c(672): warning C280: 'BLE_Test_Case': unreferenced local variable
+..\user\SPI.c(672): warning C280: 'BLE_Test_Ruslt': unreferenced local variable
+..\user\SPI.c(680): warning C280: 'flag': unreferenced local variable
+..\user\SPI.c(684): warning C280: 'out_break': unreferenced local variable
+..\user\SPI.c(730): warning C280: 'out_break': unreferenced local variable
+..\user\SPI.c(767): warning C280: 'flag': unreferenced local variable
+..\user\SPI.c(771): warning C280: 'out_break': unreferenced local variable
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0046H
+Program Size: data=48.0 xdata=331 code=5141
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 18 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+*****error: 芯片连接失败！请检查芯片是否连接正常。
+Build target 'Target 1'
+compiling SPI.c...
+..\user\SPI.c(41): warning C231: 'rx_buf': redefinition
+..\user\SPI.c(345): warning C235: parameter 1: different types
+..\user\SPI.c(352): warning C235: parameter 1: different types
+..\user\SPI.c(352): warning C235: parameter 2: different types
+..\user\SPI.c(672): warning C280: 'BLE_Test_Case': unreferenced local variable
+..\user\SPI.c(672): warning C280: 'BLE_Test_Ruslt': unreferenced local variable
+..\user\SPI.c(680): warning C280: 'flag': unreferenced local variable
+..\user\SPI.c(684): warning C280: 'out_break': unreferenced local variable
+..\user\SPI.c(730): warning C280: 'out_break': unreferenced local variable
+..\user\SPI.c(767): warning C280: 'flag': unreferenced local variable
+..\user\SPI.c(771): warning C280: 'out_break': unreferenced local variable
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0046H
+Program Size: data=48.0 xdata=331 code=5141
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 13 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0046H
+Program Size: data=48.0 xdata=331 code=5141
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 2 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+*****error: 芯片连接失败！请检查芯片是否连接正常。
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+*****error: 初始化系统出错！请检查是否硬件设置有错误！
+power downing ,please wait...
+power downing ,please wait...
+Build target 'Target 1'
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0046H
+Program Size: data=48.0 xdata=331 code=5141
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 2 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+*****error: 初始化系统出错！请检查是否硬件设置有错误！
+power downing ,please wait...
+power downing ,please wait...
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+*****error: 初始化系统出错！请检查是否硬件设置有错误！
+power downing ,please wait...
+power downing ,please wait...
+Build target 'Target 1'
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0046H
+Program Size: data=48.0 xdata=331 code=5141
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 2 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5141 bytes programmed.
+Flash Verify Done: 5141 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(95): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(103): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(75): warning C294: unreachable code
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5144
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 7 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5144
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 2 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5144 bytes programmed.
+Flash Verify Done: 5144 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling SPI.c...
+..\user\SPI.c(41): warning C231: 'rx_buf': redefinition
+..\user\SPI.c(345): warning C235: parameter 1: different types
+..\user\SPI.c(352): warning C235: parameter 1: different types
+..\user\SPI.c(352): warning C235: parameter 2: different types
+..\user\SPI.c(672): warning C280: 'BLE_Test_Case': unreferenced local variable
+..\user\SPI.c(672): warning C280: 'BLE_Test_Ruslt': unreferenced local variable
+..\user\SPI.c(680): warning C280: 'flag': unreferenced local variable
+..\user\SPI.c(684): warning C280: 'out_break': unreferenced local variable
+..\user\SPI.c(730): warning C280: 'out_break': unreferenced local variable
+..\user\SPI.c(767): warning C280: 'flag': unreferenced local variable
+..\user\SPI.c(771): warning C280: 'out_break': unreferenced local variable
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+    ADDRESS: 0049H
+Program Size: data=48.0 xdata=331 code=5143
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 13 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 5143 bytes programmed.
+Flash Verify Done: 5143 bytes verified.
+Program Option Done
+Verify Option Done
+Build target 'Target 1'
+compiling main.c...
+..\user\Test_Prom.h(9): warning C235: parameter 1: different types
+..\user\Test_Prom.h(9): warning C235: parameter 2: different types
+..\user\main.c(95): warning C206: 'ADC_OUT': missing function-prototype
+..\user\main.c(103): warning C206: 'MG127_MIO_Test': missing function-prototype
+..\user\main.c(84): warning C294: unreachable code
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADC_OUT
+    MODULE:  .\main.obj (MAIN)
+Program Size: data=50.0 xdata=377 code=4666
+creating hex file from "Pro"...
+"Pro" - 0 Error(s), 6 Warning(s).
+Load "D:\\Working\\2018\\QMS7912\\QMS7912V1.2-Test\\Project\\Pro" 
+Flash Erase Done.
+Option Erase Done.
+Flash Write Done: 4666 bytes programmed.
+Flash Verify Done: 4666 bytes verified.
+Program Option Done
+Verify Option Done

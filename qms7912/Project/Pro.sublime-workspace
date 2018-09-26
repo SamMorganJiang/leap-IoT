@@ -1,0 +1,262 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 59.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				":w",
+				":w - Save"
+			],
+			[
+				"package",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"pack",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 496.0
+	},
+	"console":
+	{
+		"height": 56.0,
+		"history":
+		[
+			"import urllib.request,os; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); open(os.path.join(ipp, pf), 'wb').write(urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ','%20')).read())"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"//192.168.1.107/dailybuild2/20180514/mt6739atv2_fd38afn_d07d_xlj_cc_discrete16d3_n1_lte_6m-cs_qphone_eng_jiangshan_20180514160317/build_all.log_err",
+		"/C/Users/piao/.ssh/id_rsa.pub",
+		"/C/Users/piao/Desktop/TOOLS.INI",
+		"/C/Keil_v5/TOOLS.INI",
+		"/G/Google/官方链接地址.txt",
+		"/C/Users/piao/Desktop/Tools/MyPrj/IOT/keil5/安装步骤 .txt",
+		"/C/Users/piao/Desktop/Tools/MyPrj/IOT/使用说明 .txt",
+		"/C/Users/piao/Desktop/Tools/MyPrj/IOT/uvision5_79273/jb51.net.txt",
+		"/D/IOT/Prj_demo/Project/Test_Prom.lst",
+		"/D/IOT/Prj_demo/Project/HCLinkHwSetICOpt.ini",
+		"/D/IOT/Prj_demo/Project/Pro.M51",
+		"//192.168.1.108/dailybuild2/20180709/mt6737atv_n34acl_j5003h2_sbyh_cc_digit_s_128gbitp16d3_n_lte_5m-cs_qphone_user_digit_signer_20180709101910/build_all.log_err",
+		"/C/Users/piao/Documents/WeChat Files/Rattan-J/Files/add.sh",
+		"/C/Users/piao/Desktop/thermal.conf.txt",
+		"/C/Users/piao/Desktop/thermal_eng.conf.txt",
+		"/C/Users/piao/Desktop/uvc打开之前的uvcpatch，关闭qmu/宏开关.txt",
+		"/C/Users/piao/Desktop/uvc_不带任何usbpatch，只打开宏开关/宏开关.txt",
+		"/C/Users/piao/Desktop/资料和工具/thermal_config_tool_V1.13.0_dev/decrypt/thermal_eng.conf.txt",
+		"/C/Users/piao/Desktop/资料和工具/thermal_config_tool_V1.13.0_dev/decrypt/thermal.conf.txt",
+		"/C/ProgramData/SP_FT_Logs/SP_FT_Dump_06-01-2018-21-26-05/QT_FLASH_TOOL.log",
+		"/C/ProgramData/SP_FT_Logs/SP_FT_Dump_06-01-2018-21-26-05/BROM_DLL_V5.log",
+		"/C/Users/piao/Desktop/资料和工具/thermal_config_tool_V1.13.0_dev/decrypt/thermal.con.txt",
+		"/C/Users/piao/Desktop/资料和工具/我的项目/tvz02/Initial configuration for xc9080+OV4689_436Mbps_colorbar_yuv422@30fps.txt",
+		"/C/Program Files (x86)/GMAT_TOOL/GMAT_TOOL.uir",
+		"/C/Program Files (x86)/GMAT_TOOL/zcv_excel1_p1.csv",
+		"/C/Users/piao/Desktop/bootprof_android",
+		"/C/Users/piao/Desktop/bootprof_360",
+		"/C/Users/piao/Desktop/资料和工具/我的项目/tcz03/TXW280035I0调屏资料/ILI9341_IVO2.8_G2.2_20180205.txt",
+		"/C/Users/piao/Desktop/资料和工具/我的项目/电池曲线tool/GM3.0_dtsi_CFG_file/5 table CFG file/CFG_GM30_dtsi_prop_ext.txt",
+		"/C/Users/piao/Desktop/资料和工具/我的项目/电池曲线tool/GM3.0_dtsi_CFG_file/5 table CFG file/CFG_GM30_dtsi_table_ext.txt",
+		"/C/Users/piao/Desktop/1#gammasettingforbat.txt",
+		"//192.168.1.136/ondemand/2467_mt6737atv_tvz03t_z1_vanzo_cc_64gbitp8d3_n_lte_6m-cs/handled_request001.txt",
+		"//192.168.1.108/dailybuild2/20180425/mt6737atv_n38acl_test03_vanzo_cc_256gbitp24d3_o1_lte_6m-cs_user_jiangshan_20180425154413/build_all.log_err",
+		"/C/Users/piao/Desktop/3#gamma settingforbat.txt",
+		"/C/Users/piao/Desktop/code.txt",
+		"/C/Users/piao/Desktop/GM3.0_dtsi_CFG_file/4 table CFG file/CFG_GM30_dtsi_table.txt",
+		"/C/Users/piao/Desktop/GM3.0_dtsi_CFG_file/4 table CFG file/CFG_GM30_dtsi_prop.txt",
+		"//192.168.1.110/dailybuild2/20180403/mt6737atv_tvz03t_z1_vanzo_cc_64gbitp8d3_n_lte_6m-cs_user_fangjie_20180403095532/build_all.log_err",
+		"//192.168.1.104/dailybuild2/20180307/mt6739atv_fd38afn_e5503_yiyou_cc_discrete24d3_n1_lte_5m-cs_cta_qphone_user_shuguang_20180307140703/build_all.log_err",
+		"//192.168.1.115/dailybuild2/20180302/mt6739atv_fd38afn_test05_vanzo_cc_discrete24d3_n1_lte_5m-cs_user_shangchenyu_20180302153113/build_all.log_err",
+		"/C/Users/piao/Desktop/log/APLog_2010_0101_091313__8/kernel_log_2010_0101_091313.curf",
+		"/C/Users/piao/Desktop/log/APLog_2010_0101_091101__12/kernel_log_2010_0101_091101.curf",
+		"/C/Users/piao/Desktop/APLog_2010_0101_090320__11/kernel_log.boot",
+		"/C/Users/piao/Desktop/资料和工具/ATA/ATA_20170916_闪光灯/log/2018_01_15_09_52_54_691.txt",
+		"/C/Users/piao/Desktop/资料和工具/GAT/20170822_123505/GAT_v3.1716.3(Official)/gat-win32-x86_64-3/prebuilt/android-sdk/bin/log",
+		"/C/Users/piao/Desktop/APLog_2010_0101_091405__9/kernel_log.boot",
+		"/Z/share/mt6739_battery_table.dtsi",
+		"/Z/share/ILI9881P_Panda5.5HD+.txt",
+		"/C/Users/piao/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Z/platform_m_6737_6735_cdma_a_ali/out/target/product/n38acl_37t/MT6737T_Android_scatter.txt",
+		"//jiang-pc/home_jiang/zprojects_ali/n28acl-changhong/env_n28acl-changhong.ini",
+		"/C/Users/piao/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/C/Users/piao/AppData/Roaming/Sublime Text 3/Packages/User/Default (OSX).sublime-keymap",
+		"//192.168.8.54/jiang/build_projects2/work/platform_m_6737_6735_cdma_a_ali/kernel-3.18/drivers/misc/mediatek/lcm/rm68200_cmi50_qicai_hd/rm68200_cmi50_qicai_hd.c",
+		"/C/Users/piao/Desktop/lcm_mtk_to_spreadtrum.py",
+		"/C/Users/piao/AppData/Roaming/Sublime Text 3/Packages/PackageResourceViewer/README.md",
+		"//192.168.8.54/jiang/build_projects2/work/platform_m_6737_6735_cdma_a_ali/kernel-3.18/drivers/misc/mediatek/lcm/lcm_gpio.c",
+		"//192.168.8.54/jiang/build_projects2/work/platform_m_6737_6735_cdma_a_ali/kernel-3.18/drivers/misc/mediatek/lcm/Kconfig",
+		"//192.168.8.54/jiang/build_projects2/work/platform_m_6737_6735_cdma_a_ali/kernel-3.18/drivers/misc/mediatek/lcm/mt65xx_lcm_list.c",
+		"//192.168.8.54/jiang/build_projects2/work/platform_m_6737_6735_cdma_a_ali/kernel-3.18/drivers/misc/mediatek/Makefile",
+		"//192.168.8.54/jiang/build_projects2/work/platform_m_6737_6735_cdma_a_ali/kernel-3.18/drivers/misc/mediatek/imgsensor/inc/kd_imgsensor.h",
+		"/C/Users/piao/AppData/Roaming/Sublime Text 3/Packages/PlainTasks/messages/Tutorial.todo"
+	],
+	"find":
+	{
+		"height": 29.0
+	},
+	"find_in_files":
+	{
+		"height": 90.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"task_test1",
+			"RTX_RAMTOP",
+			"RTX_MAXTASKN",
+			"os_system_init",
+			"MOV",
+			"ERROR",
+			"error",
+			"ERROR",
+			"error",
+			"hy2615",
+			"hy2165",
+			"HALL",
+			"hall",
+			"epl259x.c"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 29.0
+	},
+	"input":
+	{
+		"height": 38.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.SublimeLinter":
+	{
+		"height": 0.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "Pro.sublime-project",
+	"replace":
+	{
+		"height": 54.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": false,
+	"side_bar_width": 235.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   SPI                                                               07/12/2018 11:32:25 PAGE 1   
+C51 COMPILER V9.56.0.0   SPI                                                               08/24/2018 15:47:31 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE SPI
@@ -19,7 +19,7 @@ line level    source
    9          sbit    SCK=P0^1;                                                                               //P03 SCK
   10          sbit    IRQ=P0^5;                                                       //P05 IRQ
   11          sbit    SI=P0^2;                                                                                //P02 SI
-  12          sbit    SO=P0^2;        
+  12          sbit    SO=P0^2;
   13          
   14          
   15          /* Private macro -------------------------------------------------------------*/
@@ -43,11 +43,11 @@ line level    source
   33          
   34          void SPI_Init(void)
   35          {
-  36   1          P0M0 = 0xcc;        
+  36   1          P0M0 = 0xcc;
   37   1      }
   38          
-  39          void SPI_Write_Byte(int data1) 
-  40          { 
+  39          void SPI_Write_Byte(int data1)
+  40          {
   41   1          int data i;
   42   1          P0M1 = 0x6c;
   43   1          for(i = 0; i < 8; i++) {
@@ -62,16 +62,16 @@ line level    source
   52   2          }
   53   1          SCK = 0;
   54   1          SI = 1;
-C51 COMPILER V9.56.0.0   SPI                                                               07/12/2018 11:32:25 PAGE 2   
+C51 COMPILER V9.56.0.0   SPI                                                               08/24/2018 15:47:31 PAGE 2   
 
-  55   1      } 
+  55   1      }
   56          
-  57          int SPI_Read_Byte(void) 
-  58          { 
+  57          int SPI_Read_Byte(void)
+  58          {
   59   1          int ret = 0;
   60   1          int i = 0;
   61   1      
-  62   1          P0M1 = 0xc6;        
+  62   1          P0M1 = 0xc6;
   63   1          for(i = 0; i < 8; i++) {
   64   2              SCK = 0;
   65   2              SCK = 1;
@@ -83,20 +83,20 @@ line level    source
   71   1          P0M1 = 0x6c;
   72   1          SCK = 0;
   73   1          return ret;
-  74   1      } 
+  74   1      }
   75          
   76          void SPI_Write_Reg(int reg, int datae)
-  77          { 
+  77          {
   78   1          CSN = 0;
   79   1      
   80   1          SPI_Write_Byte(reg);
   81   1          SPI_Write_Byte(datae);
   82   1      
   83   1          CSN = 1;
-  84   1      } 
+  84   1      }
   85          
-  86          int SPI_Read_Reg(int reg) 
-  87          { 
+  86          int SPI_Read_Reg(int reg)
+  87          {
   88   1          int data temp0=0;
   89   1      
   90   1          CSN = 0;
@@ -106,10 +106,10 @@ line level    source
   94   1      
   95   1          CSN = 1;
   96   1          return temp0;
-  97   1      } 
+  97   1      }
   98          
-  99          void SPI_Write_Buffer(int reg, int *dataBuf, int len) 
- 100          { 
+  99          void SPI_Write_Buffer(int reg, int *dataBuf, int len)
+ 100          {
  101   1          int data temp0=0;
  102   1      
  103   1          CSN = 0;
@@ -125,12 +125,12 @@ line level    source
  113   1          delay(5);
  114   1      
  115   1          CSN = 1;
- 116   1      } 
-C51 COMPILER V9.56.0.0   SPI                                                               07/12/2018 11:32:25 PAGE 3   
+ 116   1      }
+C51 COMPILER V9.56.0.0   SPI                                                               08/24/2018 15:47:31 PAGE 3   
 
  117          
- 118          void SPI_Read_Buffer(int reg, int *dataBuf, int len) 
- 119          { 
+ 118          void SPI_Read_Buffer(int reg, int *dataBuf, int len)
+ 119          {
  120   1          int data temp0=0;
  121   1      
  122   1          CSN = 0;
@@ -190,7 +190,7 @@ line level    source
  176   1      #if 1
  177   1          //read c=hip version
  178   1          status=SPI_Read_Reg(0x1e);
-C51 COMPILER V9.56.0.0   SPI                                                               07/12/2018 11:32:25 PAGE 4   
+C51 COMPILER V9.56.0.0   SPI                                                               08/24/2018 15:47:31 PAGE 4   
 
  179   1          SendString("chip version=");
  180   1          SendString(CharToHexStr(status));   //SendChar(status);
@@ -254,7 +254,7 @@ line level    source
  238   1          SPI_Write_Buffer(0xD, _buf, 2);
  239   1      
  240   1          _buf[0] = 0x01;
-C51 COMPILER V9.56.0.0   SPI                                                               07/12/2018 11:32:25 PAGE 5   
+C51 COMPILER V9.56.0.0   SPI                                                               08/24/2018 15:47:31 PAGE 5   
 
  241   1          _buf[1] = 0x07;
  242   1          SPI_Write_Buffer(0xE, _buf, 2);
@@ -318,7 +318,7 @@ line level    source
  300   1          temp0[0] = _us & 0xff;
  301   1          temp0[1] = (_us >> 8) & 0xff;
  302   1          temp0[2] = (_us >> 16) & 0xff;
-C51 COMPILER V9.56.0.0   SPI                                                               07/12/2018 11:32:25 PAGE 6   
+C51 COMPILER V9.56.0.0   SPI                                                               08/24/2018 15:47:31 PAGE 6   
 
  303   1      
  304   1          SPI_Write_Buffer(TIMEOUT, temp0, 3);
@@ -382,7 +382,7 @@ line level    source
  362   2                  break;
  363   2                  */
  364   2              default:
-C51 COMPILER V9.56.0.0   SPI                                                               07/12/2018 11:32:25 PAGE 7   
+C51 COMPILER V9.56.0.0   SPI                                                               08/24/2018 15:47:31 PAGE 7   
 
  365   2                  len_tmp = 0;
  366   2                  break;
@@ -443,10 +443,10 @@ line level    source
  421   1          SPI_Write_Reg(0x50, 0x56);
  422   1          SPI_Write_Reg(0x20,0x0);
  423   1      
- 424   1          SPI_Write_Reg(0x50, 0x53);  
+ 424   1          SPI_Write_Reg(0x50, 0x53);
  425   1          SPI_Write_Reg(0x36, 0x8c);  //
  426   1          SPI_Write_Reg(0x50, 0x51);
-C51 COMPILER V9.56.0.0   SPI                                                               07/12/2018 11:32:25 PAGE 8   
+C51 COMPILER V9.56.0.0   SPI                                                               08/24/2018 15:47:31 PAGE 8   
 
  427   1      
  428   1          SPI_Write_Reg(0x21,0x00);
@@ -455,7 +455,7 @@ line level    source
  431   1      
  432   1          SPI_Write_Reg(0x20,0x0e);
  433   1          SPI_Write_Reg(0x26,0x96); //for cont wave
- 434   1          SPI_Write_Reg(0xe3,0xff);   
+ 434   1          SPI_Write_Reg(0xe3,0xff);
  435   1      
  436   1          SPI_Write_Reg(0x50, 0x53);
  437   1          SPI_Write_Reg(0x36, 0x8e); //
@@ -510,7 +510,7 @@ line level    source
  486   1          BLE_Set_Xtal(1);
  487   1          BLE_Mode_PwrUp();
  488   1      
-C51 COMPILER V9.56.0.0   SPI                                                               07/12/2018 11:32:25 PAGE 9   
+C51 COMPILER V9.56.0.0   SPI                                                               08/24/2018 15:47:31 PAGE 9   
 
  489   1      #if 1  //if adv_ no change, can move this block to the end of BLE_Init()
  490   1          //set BLE TX default channel:37.38.39
@@ -574,7 +574,7 @@ line level    source
  547   4                                      SendString("<--- INT_TYPE_SLEEP --->\n");
  548   4                      tick = BLE_GUARD_TIME;
  549   4      
-C51 COMPILER V9.56.0.0   SPI                                                               07/12/2018 11:32:25 PAGE 10  
+C51 COMPILER V9.56.0.0   SPI                                                               08/24/2018 15:47:31 PAGE 10  
 
  550   4                      //BLE channel
  551   4                      if (++ch > 39)
@@ -607,7 +607,7 @@ line level    source
  578   1          SPI_Write_Reg(0x50, 0x56);
  579   1          SPI_Write_Reg(0x20,0x0);
  580   1          SPI_Write_Reg(0x50, 0x53);
- 581   1          SPI_Write_Reg(0x36, 0x8c);  
+ 581   1          SPI_Write_Reg(0x36, 0x8c);
  582   1          SPI_Write_Reg(0x27,0x0F);
  583   1          SPI_Write_Buffer(0x4, data_buf, 2);
  584   1          SPI_Write_Reg(0x50, 0x51);
@@ -615,13 +615,13 @@ line level    source
  586   1          SPI_Write_Reg(0x25,0x50);  //freq = 2400+80 M
  587   1          SPI_Write_Reg(0x24,0x00);
  588   1          SPI_Write_Reg(0x20,0x0e);
- 589   1          SPI_Write_Reg(0x26,0x96); 
+ 589   1          SPI_Write_Reg(0x26,0x96);
  590   1          SPI_Write_Reg(0xe3,0xff);
  591   1          SPI_Write_Reg(0x50, 0x53);
- 592   1          SPI_Write_Reg(0x36, 0x8e); 
+ 592   1          SPI_Write_Reg(0x36, 0x8e);
  593   1          SPI_Write_Reg(0x50, 0x51);
  594   1          SPI_Write_Reg(0x26, 0x06);
- 595   1          SPI_Write_Reg(0x26, 0x96); 
+ 595   1          SPI_Write_Reg(0x26, 0x96);
  596   1          SPI_Write_Reg(0x50, 0x53);
  597   1      }
  598          
@@ -638,7 +638,7 @@ line level    source
  609   3                      data_buf[1] = 9;
  610   3                      SPI_Write_Buffer(0x4, data_buf, 2);
  611   3                      break;
-C51 COMPILER V9.56.0.0   SPI                                                               07/12/2018 11:32:25 PAGE 11  
+C51 COMPILER V9.56.0.0   SPI                                                               08/24/2018 15:47:31 PAGE 11  
 
  612   3                  case 10:
  613   3                      data_buf[1] = 10;
@@ -702,7 +702,7 @@ line level    source
  671   3                      break;
  672   3                  case 25:
  673   3                      data_buf[1] = 25;
-C51 COMPILER V9.56.0.0   SPI                                                               07/12/2018 11:32:25 PAGE 12  
+C51 COMPILER V9.56.0.0   SPI                                                               08/24/2018 15:47:31 PAGE 12  
 
  674   3                      SPI_Write_Buffer(0x4, data_buf, 2);
  675   3                      break;

@@ -1,0 +1,3 @@
+---- qma6981_read_raw_xyz Matches (2 in 2 files) ----
+QMA6981.c (d:\code\qms7912\qms7912v1_2\user):void qma6981_read_raw_xyz(void)
+QMA6981.h (d:\code\qms7912\qms7912v1_2\user):void qma6981_read_raw_xyz(unsigned char  *acc);

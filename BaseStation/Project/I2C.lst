@@ -1,0 +1,111 @@
+C51 COMPILER V9.56.0.0   I2C                                                               09/26/2018 10:29:50 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE I2C
+OBJECT MODULE PLACED IN .\I2C.obj
+COMPILER INVOKED BY: C:\Keil_v5c51\C51\BIN\C51.EXE ..\user\I2C.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT
+                    -(.\I2C.lst) OBJECT(.\I2C.obj)
+
+line level    source
+
+   1          #include "HC89F0650.h"
+   2          #include "Uart.h"
+   3          #include "I2C.h"
+   4          #include "Timer.h"
+   5          #include "string.h"
+   6          
+   7          #define DEVICEADD       0x24                            //器件地址
+   8          #define STA     0x20                                            //起始位
+   9          #define STO 0x10                                                //停止位
+  10          #define SI      0x08                                            //IIC串行中断标志
+  11          #define AA      0X04                                            //应答标志
+  12          
+  13          sbit SCL=P2^7;                                          //模拟I2C时钟控制位
+  14          sbit SDA=P4^4;                                          //模拟I2C数据传送位
+  15          
+  16          
+  17          void IIC_Init(void)
+  18          {
+  19   1              P2M3 = 0xA3;
+  20   1              P4M2 = 0x3A;
+  21   1              SCL_MAP = 0x17;
+  22   1              SDA_MAP = 0x24;
+  23   1              IICCON = 0x40;   
+  24   1      }
+  25          
+  26          void IIC_Send_Byte(unsigned char data addr,
+  27                                                  unsigned char data val)
+  28          {
+  29   1              IICCON &=~ SI;
+  30   1              IICCON |= STA;                  //启动
+  31   1              while((!(IICCON&SI))&&(IICSTA!=0x08));
+  32   1              IICCON &=~ STA;
+  33   1              IICCON &=~ SI;
+  34   1              IICDAT = DEVICEADD;
+  35   1              while(IICSTA != 0x18);
+  36   1              IICCON &=~ SI;
+  37   1              IICDAT = addr;
+  38   1              while(IICSTA!=0x28);
+  39   1              IICCON &=~ SI;
+  40   1              IICDAT = val;
+  41   1              while(IICSTA!=0x28);
+  42   1              IICCON &=~ SI;
+  43   1              IICCON |= STO; 
+  44   1      }
+  45          
+  46          void IIC_Send_nByte(unsigned char data addr,
+  47                                                  unsigned char data *write_buf,
+  48                                                  unsigned char data nbyte)
+  49          {
+  50   1      
+  51   1      }
+*** WARNING C280 IN LINE 46 OF ..\user\I2C.c: 'addr': unreferenced local variable
+*** WARNING C280 IN LINE 47 OF ..\user\I2C.c: 'write_buf': unreferenced local variable
+*** WARNING C280 IN LINE 48 OF ..\user\I2C.c: 'nbyte': unreferenced local variable
+C51 COMPILER V9.56.0.0   I2C                                                               09/26/2018 10:29:50 PAGE 2   
+
+  52          
+  53          unsigned char IIC_Read_Byte(unsigned char data addr)
+  54          {
+  55   1              unsigned char data val;
+  56   1      
+  57   1              IICCON &=~ SI;
+  58   1              IICCON |= STA;                  //启动
+  59   1              while((!(IICCON&SI))&&(IICSTA!=0x08));
+  60   1              IICCON &=~ STA;
+  61   1              IICCON &=~ SI;
+  62   1              IICDAT = DEVICEADD;             //写入写指令
+  63   1              while(IICSTA!=0x18);
+  64   1              IICCON &=~ SI;
+  65   1              IICDAT = addr;                  //写入读地址
+  66   1              while(IICSTA!=0x28);
+  67   1              IICCON &=~ SI;
+  68   1              IICCON |= STA;                  //启动
+  69   1              while((!(IICCON&SI))&&(IICSTA!=0x08));
+  70   1              IICCON &=~ STA;
+  71   1              IICCON &=~ SI;
+  72   1              IICDAT = DEVICEADD|0x01;//写入读指令
+  73   1              while(IICSTA!=0x40);
+  74   1              IICCON &=~ SI;
+  75   1              while(IICSTA!=0x58); 
+  76   1              val = IICDAT;                   //读入数据
+  77   1              IICCON &=~ SI;
+  78   1              IICCON |= STO;
+  79   1              return val;
+  80   1      }
+  81          
+  82          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    189    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       3
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  3 WARNING(S),  0 ERROR(S)

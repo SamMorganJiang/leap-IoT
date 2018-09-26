@@ -18,6 +18,11 @@ unsigned char data bufflag = 0;
 unsigned char data str[4];
 
 unsigned int rtc_count = 0;
+unsigned int flag_trx = 0;
+
+static u8 tx_cnt;
+static u8 rx_cnt;
+
 void RCT_Init(void);
 void UART_Init(void);
 void System_init(void);
@@ -53,40 +58,47 @@ void main(void)
 
 	System_init();	   					//系统初始化
 	IO_Init();							//IO初始化
-	RCT_Init();							//RTC初始化
+	//RCT_Init();							//RTC初始化
 	SPI_Init();                         //SPI初始化
 	IIC_Init();
 	//UART_Init();
 	//ES1 = 1;	 						//开串口中断
 
-	while(1) {
-		if (KEY == 1) {
-			Delay_ms(30);
-			if (KEY == 1) {
-				LED1 = ~LED1;
-				LED2 = ~LED2;
-			}
-		}
-	}
-
 	ERTC=0;								//disable RTC中断
 	EA = 1;								//使能总中断
 
-	if(qmaX981_get_chip_id()) {
+	if (qmaX981_get_chip_id()) {
 		qma6981_initialize();
 	}
 	BLE_Init();
-
+	LED2 = 1;
+	tx_cnt = 500; //txcnt=0 is for rx only application
+	rx_cnt = 0; //rxcnt=0 is for tx only application
 	while(1) {
-		//////ble rtx api
-		//txcnt=100; //txcnt=0 is for rx only application
-		//rxcnt=20; //rxcnt=0 is for tx only application
-		//qma6981_read_raw_xyz();
-		if(rtc_count == 0) {
+		/*
+		if (KEY == 1) {
+			Delay_ms(30);
+			if (KEY == 1 && flag_trx == 0) {     //tx mode
+				LED2 = 1;
+				flag_trx == 1;
+				tx_cnt = 500; //txcnt=0 is for rx only application
+				rx_cnt = 0; //rxcnt=0 is for tx only application
+				goto TX_MODE;
+			}
+			if (KEY == 1 && flag_trx == 1) {     //rx mode
+				LED2 = 0;
+				flag_trx == 0;
+				tx_cnt = 0; //txcnt=0 is for rx only application
+				rx_cnt = 500; //rxcnt=0 is for tx only application
+				goto RX_MODE;
+			}
+		}
+*/
+TX_MODE:
+		//if(rtc_count == 0) {
 			ERTC=0; 							//disable RTC中断
-			step_num = qmaX981_step_c_read_stepCounter();
-			//BLE_Set_rxtxcnt(100, 20);
-			BLE_Set_rxtxcnt(500, 0);
+			//step_num = qmaX981_step_c_read_stepCounter();
+			BLE_Set_rxtxcnt(tx_cnt, rx_cnt);
 			BLE_TRX();
 
 			//delay to set ble tx interval
@@ -95,7 +107,15 @@ void main(void)
 			// add by yangzhiqiang enter power done mode
 			PCON |= 0x03;
 			// yangzhiqiang
-		}
+			LED1 = 0;
+		//}
+		continue;
+
+RX_MODE:
+		//if (!flag_trx) {
+			BLE_Set_rxtxcnt(tx_cnt, rx_cnt);
+			BLE_TRX();
+		//}
 	}
 }
 
@@ -110,7 +130,7 @@ void delay_by_ms(unsigned int timdlay)
 {
 	unsigned char j;
 	for(;timdlay>0;timdlay--)
-	for(j=100;j>0;j--);
+		for(j=100;j>0;j--);
 }
 
 /***************************************************************************************
@@ -249,8 +269,8 @@ void Rtc_Irt()interrupt RTC_VECTOR
 //	P0_1 =! P0_1; 					   //P01·-×a
 	rtc_count++;
 	RTCC &= ~0x80;					   //??3y?D??±ê????
-	if(rtc_count >= 5)
-	{
+	if (rtc_count >= 3) {
+		//LED1 = 1;
 		rtc_count = 0;
 		ERTC=0; 							//disable RTC中断
 		PCON &= (~0x03);

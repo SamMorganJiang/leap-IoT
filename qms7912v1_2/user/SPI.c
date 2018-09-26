@@ -9,7 +9,7 @@ sbit	CSN=P0^0;										//P00???CS
 sbit	SCK=P0^1;										//P03???SCK
 sbit	IRQ=P4^2;                   //P05???IRQ
 sbit	SI=P0^2;										//P02???SI
-sbit	SO=P0^2;	
+sbit	SO=P0^2;
 
 
 void SPI_Init(void)

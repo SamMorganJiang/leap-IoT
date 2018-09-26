@@ -1,0 +1,263 @@
+C51 COMPILER V9.56.0.0   ADC                                                               09/21/2018 17:54:06 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE ADC
+OBJECT MODULE PLACED IN .\ADC.obj
+COMPILER INVOKED BY: C:\Keil_v5c51\C51\BIN\C51.EXE ..\user\ADC.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT
+                    -(.\ADC.lst) OBJECT(.\ADC.obj)
+
+line level    source
+
+   1          #include "HC89F0650.h"
+   2          #include "Uart.h"
+   3          #include "SPI.h"
+   4          #include "I2C.h"
+   5          #include "ADC.h"
+   6          #include "Test_Prom.h"
+*** WARNING C318 IN LINE 6 OF ..\user\ADC.c: can't open file 'Test_Prom.h'
+   7          #include "Timer.h"
+   8          #include <HC_DEFINE.H>
+   9          
+  10          sbit ADC1 = P2^5;   //Test Add 1.2V
+  11          sbit ADC_Contr2 = P3^3;  //Test ADC Test Contrl
+  12          sbit ADC_Contr1 = P3^4;  
+  13          sbit ADC_Contr3 = P5^5;
+  14          sbit ADC_test_bit1 = P1^5;
+  15          sbit ADC_test_bit2 = P1^6;
+  16          sbit ADC_test_bit3 = P1^7;
+  17          sbit ADC_test_bit4 = P5^3;
+  18          
+  19          
+  20          
+  21          unsigned int  ADC_sum = 0;
+  22          unsigned int  ADC_Report = 0;
+  23          
+  24          void ADC_TestInit(void)
+  25          {
+  26   1              P2M2 = 0x33;                    //P22口设置为模拟输入
+  27   1        //    P5M1 = 0x33;                    //P53口设置为模拟输入
+  28   1              P1M2 = 0xD3;
+  29   1              P1M3 = 0xDD;
+  30   1              P5M1 = 0xD3;
+  31   1              //P5M2 = 0x33;
+  32   1              P3M1 = 0x03;
+  33   1              P3M2 = 0x30;
+  34   1              
+  35   1              ADCC0 |= 0x80;                                          //打开ADC转换电源
+  36   1              ADCC1 |= 0x0D;                                          //选择外部通道10
+  37   1              ADCC2 = 0x13;                                           //转换结果12位数据，高八位置于ADCRH寄存器，ADC时钟8分频
+  38   1              
+  39   1      }
+  40          
+  41          u8 data data8_1;
+  42          u8 data data8_2;
+  43          u8 data data8_3;
+  44          u8 data data8_4;
+  45          
+  46          void Data_Covent(unsigned int data ADC_data)
+  47          {
+  48   1      //unsigned int data ADC_data ;
+  49   1      unsigned int data ADC_data2;
+  50   1              
+  51   1      ADC_data2 = ADC_data & 0x000f;
+  52   1      data8_1 = ADC_data2;
+  53   1      ADC_data2 = (ADC_data >> 4);
+C51 COMPILER V9.56.0.0   ADC                                                               09/21/2018 17:54:06 PAGE 2   
+
+  54   1      ADC_data2 = ADC_data2 & 0x000f;
+  55   1      data8_2 = (u8)ADC_data2;
+  56   1      ADC_data2 = (ADC_data >> 8);
+  57   1      ADC_data2 = ADC_data2 & 0x000f;
+  58   1      data8_3 = (u8)ADC_data2;
+  59   1      ADC_data2 = (ADC_data >> 12);
+  60   1      ADC_data2 = ADC_data2 & 0x000f;
+  61   1      data8_4 = (u8)ADC_data2;        
+  62   1      }
+  63          
+  64          void Data_Out(u8 data data_out)
+  65          {
+  66   1              switch(data_out)
+  67   1              {
+  68   2              case 0x00:
+  69   2              ADC_test_bit1 = 0;
+  70   2              ADC_test_bit2 = 0;
+  71   2              ADC_test_bit3 = 0;
+  72   2              ADC_test_bit4 = 0;
+  73   2        break;        
+  74   2              case 0x01:
+  75   2              ADC_test_bit1 = 1;
+  76   2              ADC_test_bit2 = 0;
+  77   2              ADC_test_bit3 = 0;
+  78   2              ADC_test_bit4 = 0;
+  79   2              break;
+  80   2              case 0x02:
+  81   2              ADC_test_bit1 = 0;
+  82   2              ADC_test_bit2 = 1;
+  83   2              ADC_test_bit3 = 0;
+  84   2              ADC_test_bit4 = 0;
+  85   2              break;  
+  86   2              case 0x03:
+  87   2              ADC_test_bit1 = 1;
+  88   2              ADC_test_bit2 = 1;
+  89   2              ADC_test_bit3 = 0;
+  90   2              ADC_test_bit4 = 0;
+  91   2              break;          
+  92   2              case 0x04:
+  93   2              ADC_test_bit1 = 0;
+  94   2              ADC_test_bit2 = 0;
+  95   2              ADC_test_bit3 = 1;
+  96   2              ADC_test_bit4 = 0;
+  97   2              break;
+  98   2              case 0x05:
+  99   2              ADC_test_bit1 = 1;
+ 100   2              ADC_test_bit2 = 0;
+ 101   2              ADC_test_bit3 = 1;
+ 102   2              ADC_test_bit4 = 0;
+ 103   2              break;
+ 104   2              case 0x06:
+ 105   2              ADC_test_bit1 = 0;
+ 106   2              ADC_test_bit2 = 1;
+ 107   2              ADC_test_bit3 = 1;
+ 108   2              ADC_test_bit4 = 0;
+ 109   2              break;
+ 110   2              case 0x07:
+ 111   2              ADC_test_bit1 = 1;
+ 112   2              ADC_test_bit2 = 1;
+ 113   2              ADC_test_bit3 = 1;
+ 114   2              ADC_test_bit4 = 0;
+ 115   2              break;
+C51 COMPILER V9.56.0.0   ADC                                                               09/21/2018 17:54:06 PAGE 3   
+
+ 116   2              case 0x08:
+ 117   2              ADC_test_bit1 = 0;
+ 118   2              ADC_test_bit2 = 0;
+ 119   2              ADC_test_bit3 = 0;
+ 120   2              ADC_test_bit4 = 1;
+ 121   2              break;
+ 122   2              case 0x09:
+ 123   2              ADC_test_bit1 = 1;
+ 124   2              ADC_test_bit2 = 0;
+ 125   2              ADC_test_bit3 = 0;
+ 126   2              ADC_test_bit4 = 1;
+ 127   2              break;
+ 128   2              case 0x0A:
+ 129   2              ADC_test_bit1 = 0;
+ 130   2              ADC_test_bit2 = 1;
+ 131   2              ADC_test_bit3 = 0;
+ 132   2              ADC_test_bit4 = 1;
+ 133   2              break;
+ 134   2              case 0x0B:
+ 135   2              ADC_test_bit1 = 1;
+ 136   2              ADC_test_bit2 = 1;
+ 137   2              ADC_test_bit3 = 0;
+ 138   2              ADC_test_bit4 = 1;
+ 139   2              break;
+ 140   2              case 0x0C:
+ 141   2              ADC_test_bit1 = 0;
+ 142   2              ADC_test_bit2 = 0;
+ 143   2              ADC_test_bit3 = 1;
+ 144   2              ADC_test_bit4 = 1;
+ 145   2              break;
+ 146   2              case 0x0D:
+ 147   2              ADC_test_bit1 = 1;
+ 148   2              ADC_test_bit2 = 0;
+ 149   2              ADC_test_bit3 = 1;
+ 150   2              ADC_test_bit4 = 1;
+ 151   2              break;
+ 152   2              case 0x0E:
+ 153   2              ADC_test_bit1 = 0;
+ 154   2              ADC_test_bit2 = 1;
+ 155   2              ADC_test_bit3 = 1;
+ 156   2              ADC_test_bit4 = 1;
+ 157   2              break;
+ 158   2              case 0x0F:
+ 159   2              ADC_test_bit1 = 1;
+ 160   2              ADC_test_bit2 = 1;
+ 161   2              ADC_test_bit3 = 1;
+ 162   2              ADC_test_bit4 = 1;
+ 163   2              break;  
+ 164   2              }       
+ 165   1      }
+ 166          
+ 167          void ADC_DATA_OUT(void)
+ 168          {
+ 169   1              if((ADC_Contr1 == 0)&&(ADC_Contr2 == 0))
+ 170   1              {
+ 171   2                      Data_Out(data8_1);
+ 172   2                      delay(20);
+ 173   2              }
+ 174   1              if((ADC_Contr1 == 0)&&(ADC_Contr2 == 1))
+ 175   1              {
+ 176   2                      Data_Out(data8_2);
+ 177   2                      delay(20);
+C51 COMPILER V9.56.0.0   ADC                                                               09/21/2018 17:54:06 PAGE 4   
+
+ 178   2              }
+ 179   1              if((ADC_Contr1 == 1)&&(ADC_Contr2 == 0))
+ 180   1              {
+ 181   2                      Data_Out(data8_3);
+ 182   2                      delay(20);
+ 183   2              }
+ 184   1              if((ADC_Contr1 == 1)&&(ADC_Contr2 == 1))
+ 185   1              {
+ 186   2                      Data_Out(data8_4);
+ 187   2                      delay(20);
+ 188   2              }
+ 189   1      }
+ 190          
+ 191          unsigned int ADC_GetResault(void)
+ 192          {
+ 193   1              ADCC0 |= 0x40;                                          //启动ADC转换
+ 194   1              while(!(ADCC0&0x20));                           //等待ADC转换结束
+ 195   1              ADCC0 &=~ 0x20;                                         //清除标志位
+ 196   1              return ADCR;                                            //返回ADC的值
+ 197   1      }
+ 198          
+ 199          /*
+ 200          
+ 201          void GPIO_TestInPinInit(void)
+ 202          {
+ 203          
+ 204                  P5M2 = 0x33;                    //P55,P55口设置为模拟输入
+ 205          }
+ 206          
+ 207          void GPIO_TestOutPinInit(void)
+ 208          {
+ 209                  
+ 210                  P5M2 = 0x99;                    //P55,P55口设置为模拟输入
+ 211          }*/
+ 212          
+ 213          void ADC_MCUTest(void)
+ 214          {
+ 215   1              int i;
+ 216   1      //  float valute[10];
+ 217   1              unsigned int  ADC_[10] = {0};
+ 218   1              ADC_sum = 0;
+ 219   1      
+ 220   1              for(i = 0;i<10;i++)
+ 221   1        {
+ 222   2        ADC_[i] = ADC_GetResault();
+ 223   2        ADC_sum += ADC_[i];
+ 224   2        delay(20);
+ 225   2        }
+ 226   1              ADC_Report = ADC_GetResault();//int) ADC_sum/10;
+ 227   1              
+ 228   1              Data_Covent(ADC_Report);
+ 229   1        ADC_DATA_OUT();
+ 230   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    526    ----
+   CONSTANT SIZE    =     20    ----
+   XDATA SIZE       =      4      22
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4       2
+   IDATA SIZE       =   ----    ----
+C51 COMPILER V9.56.0.0   ADC                                                               09/21/2018 17:54:06 PAGE 5   
+
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

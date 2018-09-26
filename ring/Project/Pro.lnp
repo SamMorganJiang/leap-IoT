@@ -1,0 +1,13 @@
+".\main.obj",
+".\Uart.obj",
+".\Timer.obj",
+".\SPI.obj",
+".\ADC.obj",
+".\MG127.obj",
+".\QMA6981.obj",
+".\I2C.obj" 
+TO "Pro" 
+RAMSIZE(256) 
+DISABLEWARNING (16) 
+CODE( 0X0000-0XFFFF )
+XDATA( 0X0000-0X07FF )

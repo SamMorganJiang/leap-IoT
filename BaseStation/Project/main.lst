@@ -1,0 +1,415 @@
+C51 COMPILER V9.56.0.0   MAIN                                                              09/26/2018 10:29:49 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\main.obj
+COMPILER INVOKED BY: C:\Keil_v5c51\C51\BIN\C51.EXE ..\user\main.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\include) DEBU
+                    -G OBJECTEXTEND PRINT(.\main.lst) OBJECT(.\main.obj)
+
+line level    source
+
+   1          #define ALLOCATE_EXTERN
+   2          #include "HC89F0650.h"
+   3          #include "intrins.h"
+   4          #include "Uart.h"
+   5          #include "SPI.h"
+   6          #include "I2C.h"
+   7          #include "MG127.h"
+   8          #include "Flash.h"
+   9          #include "SPI_Flash.h"
+  10          
+  11          sbit LED1 = P3^0;
+  12          sbit LED2 = P4^7;
+  13          sbit KEY  = P3^4;
+  14          
+  15          unsigned char data bufdat = 0;                          //用于存放和接受数据
+  16          unsigned char data bufflag = 0;
+  17          unsigned char data str[4];
+  18          unsigned char data key_short_flag = 0;
+  19          unsigned char data ket_long_flag = 0;
+  20          
+  21          unsigned int rtc_count = 0;
+  22          unsigned int t0_count = 0;
+  23          unsigned int flag_trx = 0;
+  24          
+  25          static u8 tx_cnt;
+  26          static u8 rx_cnt;
+  27          
+  28          void RCT_Init(void);
+  29          void UART_Init(void);
+  30          void System_init(void);
+  31          void IO_Init(void);
+  32          void EXTI_Init(void);
+  33          void Timer_Init(void);
+  34          void Timer_enable(unsigned int timer, unsigned int enable);
+  35          void delay_by_ms(unsigned int timdlay);
+  36          
+  37          void Delay_us(u32 delayCnt)
+  38          {
+  39   1              u32 temp0 = 0;
+  40   1      
+  41   1              for(temp0 = 0; temp0 < delayCnt; temp0++){
+  42   2              _nop_();
+  43   2              _nop_();
+  44   2              _nop_();
+  45   2              _nop_();
+  46   2              _nop_();
+  47   2              _nop_();
+  48   2              }
+  49   1      }
+  50          
+  51          void Delay_ms(u32 delayCnt)
+  52          {
+  53   1              u32 temp0 = 0;
+  54   1      
+C51 COMPILER V9.56.0.0   MAIN                                                              09/26/2018 10:29:49 PAGE 2   
+
+  55   1              for(temp0 = 0; temp0 < delayCnt; temp0++) {
+  56   2              Delay_us(1132);
+  57   2              }
+  58   1      }
+  59          
+  60          void main(void)
+  61          {
+  62   1              unsigned short step_num = 0;
+  63   1      
+  64   1              System_init();                                          //系统初始化
+  65   1              Flash_Init();                       //内置Flash初始化
+*** WARNING C206 IN LINE 65 OF ..\user\main.c: 'Flash_Init': missing function-prototype
+  66   1              IO_Init();                                                      //IO初始化
+  67   1              RCT_Init();                                                     //RTC初始化
+  68   1              SPI_Init();                         //SPI初始化
+  69   1              IIC_Init();                         //IIC初始化
+  70   1              EXTI_Init();                        //中断初始化
+  71   1              Timer_Init();                       //定时器初始化
+  72   1              EA = 1;                                                         //使能总中断
+  73   1      
+  74   1              BLE_Init();
+  75   1              //LED1 = 1;
+  76   1              LED2 = 1;
+  77   1              tx_cnt = 500; //txcnt=0 is for rx only application
+  78   1              rx_cnt = 0; //rxcnt=0 is for tx only application
+  79   1              while(1){
+  80   2      TX_MODE:
+  81   2                      if(rtc_count == 0){
+  82   3                              ERTC=0;                                                         //disable RTC中断
+  83   3                              BLE_Set_rxtxcnt(tx_cnt, rx_cnt);
+  84   3                              BLE_TRX();
+  85   3      
+  86   3                              //delay to set ble tx interval
+  87   3                              Delay_ms(100);
+  88   3                              ERTC=1;                                                         //enable RTC中断
+  89   3                              // add by yangzhiqiang enter power done mode
+  90   3                              PCON |= 0x03;
+  91   3                              // yangzhiqiang
+  92   3                              LED1 = 0;
+  93   3                      }
+  94   2                      continue;
+  95   2      
+  96   2      RX_MODE:
+  97   2                      LED2 = 1;
+  98   2                      BLE_Set_rxtxcnt(tx_cnt, rx_cnt);
+  99   2                      BLE_TRX();
+ 100   2              }
+ 101   1      }
+*** WARNING C280 IN LINE 80 OF ..\user\main.c: 'TX_MODE': unreferenced label
+*** WARNING C280 IN LINE 96 OF ..\user\main.c: 'RX_MODE': unreferenced label
+ 102          
+ 103          /***************************************************************************************
+ 104            * @说明       延时函数
+ 105            * @参数       timdlay ：延时设定值
+ 106            *                     取值范围: 1 - 65536.
+ 107            * @返回值 无
+ 108            * @注         粗略延时
+ 109          ***************************************************************************************/
+ 110          void delay_by_ms(unsigned int timdlay)
+ 111          {
+ 112   1              unsigned char j;
+ 113   1              for(;timdlay>0;timdlay--)
+C51 COMPILER V9.56.0.0   MAIN                                                              09/26/2018 10:29:49 PAGE 3   
+
+ 114   1                      for(j=100;j>0;j--);
+ 115   1      }
+ 116          
+ 117          /***************************************************************************************
+ 118            * @说明       系统初始化
+ 119            *     @参数   无
+ 120            * @返回值 无
+ 121            * @注         关闭看门狗以及时钟初始化
+ 122          ***************************************************************************************/
+ 123          void System_init(void)
+ 124          {
+ 125   1              WDTCCR = 0x00;                                          //关闭看门狗
+ 126   1      
+ 127   1              while((CLKCON&0x20)!=0x20);                     //等待内部高频晶振起振
+ 128   1              CLKDIV = 0x02;                                          //CPU时钟2分频，确保在进行RC32分频时CPU时钟小于16M
+ 129   1              CLKSWR &=~ 0x10;                                        //切换为内部高频时钟
+ 130   1              while((CLKSWR&0x40)!=0x00);                     //等待内部高频切换完成
+ 131   1              CLKDIV = 0x04;                                          //OSC时钟4分频
+ 132   1      }
+ 133          
+ 134          /***************************************************************************************
+ 135            * @说明       INT2-7中断服务函数
+ 136            *     @参数   无
+ 137            * @返回值 无
+ 138            * @注         无
+ 139          ***************************************************************************************/
+ 140          void INT2_7_Rpt() interrupt INT2_7_VECTOR
+ 141          {
+ 142   1              if(PINTF0&0x10){
+ 143   2                      PINTF0 &=~ 0x10;                        //清除INT4中断标志位
+ 144   2                      Timer_enable(0, 1);
+ 145   2                      IE |= 0x02;
+ 146   2              }
+ 147   1      }
+ 148          
+ 149          void EXTI_Init(void)
+ 150          {
+ 151   1              //PITS1  &= 0xFC;      //EINT4低电平触发
+ 152   1              PITS1  |= 0x01;      //EINT4下降沿触发
+ 153   1              PINTE0 |= 0x10;      //EINT4使能
+ 154   1              IE1    |= 0x20;          //打开中断
+ 155   1      }
+ 156          
+ 157          /***************************************************************************************
+ 158            * @说明       T0中断服务函数
+ 159            *     @参数   无
+ 160            * @返回值 无
+ 161            * @注         无
+ 162          ***************************************************************************************/
+ 163          void TIMER0_Rpt(void) interrupt TIMER0_VECTOR
+ 164          {
+ 165   1              TCON &=~ 0x20;                                          //清除T0中断标志位
+ 166   1              t0_count++;
+ 167   1      
+ 168   1              if(t0_count == 2 && KEY == 1)       //短按初步判断 100ms
+ 169   1                      key_short_flag = 1;
+ 170   1              if(t0_count == 6 && KEY != 1 && key_short_flag){    //短按确认 300ms 重置
+ 171   2                      key_short_flag = 0;
+ 172   2                      t0_count == 0;
+*** WARNING C275 IN LINE 172 OF ..\user\main.c: expression with possibly no effect
+ 173   2                      LED1 = ~LED1;
+ 174   2                      IE &= 0xFD;
+C51 COMPILER V9.56.0.0   MAIN                                                              09/26/2018 10:29:49 PAGE 4   
+
+ 175   2                      //Timer_enable(0, 0);
+ 176   2              }
+ 177   1              if(t0_count == 20 && KEY == 1){     //长按判断
+ 178   2                      key_short_flag = 0;
+ 179   2                      t0_count == 0;
+*** WARNING C275 IN LINE 179 OF ..\user\main.c: expression with possibly no effect
+ 180   2                      LED2 = ~LED2;
+ 181   2                      IE &= 0xFD;
+ 182   2                      //Timer_enable(0, 0);
+ 183   2              }
+ 184   1      }
+ 185          
+ 186          /***************************************************************************************
+ 187            * @说明       Timer初始化
+ 188            *     @参数   无
+ 189            * @返回值 无
+ 190            * @注         无
+ 191          ***************************************************************************************/
+ 192          void Timer_Init(void)
+ 193          {
+ 194   1              TCON1 = 0x00;                                           //Tx0定时器时钟为Fosc
+ 195   1              TMOD = 0x00;                                            //16位重装载定时器/计数器
+ 196   1      
+ 197   1              //Tim0计算时间  = (65536 - 0xFD64) * (1 / (Fosc /Timer分频系数))
+ 198   1              //                              = 666 / (8000000 / 12)
+ 199   1              //                              = 1 ms
+ 200   1      
+ 201   1              //定时1ms
+ 202   1              //反推初值      = 65536 - ((1/1000) / (1/(Fosc / Timer分频系数)))
+ 203   1              //                      = 65536 - ((1/1000) / (1/(8000000 / 12)))
+ 204   1              //                      = 65536 - 666
+ 205   1              //                      = 0xFD64
+ 206   1              //TH0 = 0xFD;
+ 207   1              //TL0 = 0x64;                                                   //T0定时时间1ms
+ 208   1              TH0 = 0X7D;
+ 209   1              TL0 = 0x88;                         //T0定时时间50ms
+ 210   1              IE |= 0x02;                                                     //打开T0中断
+ 211   1              TCON &= 0xE0;                                           //关闭使能T0
+ 212   1              //TCON |= 0x10;
+ 213   1      }
+ 214          
+ 215          void Timer_enable(unsigned int timer, unsigned int enable)
+ 216          {
+ 217   1              if(timer){
+ 218   2                      if(enable)
+ 219   2                              TCON |= 0x40;                       //使能T1
+ 220   2                      else
+ 221   2                              TCON &= 0xB0;
+ 222   2              } else {
+ 223   2                      if(enable)
+ 224   2                              TCON |= 0x10;                                           //使能T0
+ 225   2                      else
+ 226   2                              TCON &= 0xE0;
+ 227   2              }
+ 228   1      }
+ 229          
+ 230          /***************************************************************************************
+ 231           * @??          IO???
+ 232           * @??  ?
+ 233           * @???  ?
+ 234           * @?           P00????,P01????
+ 235           ***************************************************************************************/
+C51 COMPILER V9.56.0.0   MAIN                                                              09/26/2018 10:29:49 PAGE 5   
+
+ 236          void IO_Init(void)
+ 237          {
+ 238   1              P5M2 = 0x00;
+ 239   1      
+ 240   1              //P1M3 = 0xCC;                        //LED1、2推挽输出( IO 驱动电流 Low Drive Mode)
+ 241   1              P3M0 &= 0xF0;                        //LED1、2推挽输出( IO 驱动电流 Low Drive Mode)
+ 242   1              P3M0 |= 0x0C;
+ 243   1              P4M3 &= 0x0F;
+ 244   1              P4M3 |= 0xC0;
+ 245   1              LED1 = LED2 = 0;
+ 246   1      
+ 247   1              P3M2 &= 0xF0;
+ 248   1              P3M2 |= 0x05;                       //KEY 带下拉输入(SMT)
+ 249   1      }
+ 250          
+ 251          /***************************************************************************************
+ 252           * @??          UART???
+ 253           * @??  ?
+ 254           * @???  ?
+ 255           * @?           8?????,???1200
+ 256           ***************************************************************************************/
+ 257          void Usart_Ipt() interrupt UART1_VECTOR
+ 258          {
+ 259   1              if(SCON&0x01){
+ 260   2                      SCON &=~ 0x01;                                  //?????,??????
+ 261   2                      bufdat = SBUF & 0x0f;                   //????(???4?)
+ 262   2                      bufflag = 1;
+ 263   2                      SCON &=~ 0x10;                                  //?????
+ 264   2                      ES1 = 0;                                                //?????
+ 265   2              }
+ 266   1      }
+ 267          
+ 268          void UART_Init(void)
+ 269          {
+ 270   1              P1M3 = 0x82;
+ 271   1              TXD_MAP = 0x0F;                                         //TXD??P17
+ 272   1              RXD_MAP = 0x0E;                                         //RXD??P16
+ 273   1      
+ 274   1              SBRTH = 0xFE5F/256;
+ 275   1              SBRTL = 0xFE5F%256;
+ 276   1              SCON2 = 0x12;                                           //?????
+ 277   1              SCON |= 0X10;                                           //?????
+ 278   1      }
+ 279          
+ 280          /***************************************************************************************
+ 281            * @?μ?÷     RTC?D??·t??oˉêy
+ 282            *     @2?êy  ?T
+ 283            * @·μ???μ ?T
+ 284            * @×￠               ?T
+ 285          ***************************************************************************************/
+ 286          void Rtc_Irt()interrupt RTC_VECTOR
+ 287          {
+ 288   1              rtc_count++;
+ 289   1              RTCC &= ~0x80;                                     //??3y?D??±ê????
+ 290   1              if(rtc_count >= 3){
+ 291   2                      LED1 = 1;
+ 292   2                      rtc_count = 0;
+ 293   2                      ERTC = 0;                                                       //disable RTC中断
+ 294   2                      PCON &= (~0x03);
+ 295   2              }
+ 296   1      }
+ 297          
+C51 COMPILER V9.56.0.0   MAIN                                                              09/26/2018 10:29:49 PAGE 6   
+
+ 298          /***************************************************************************************
+ 299            * @?μ?÷     RTC3?ê??ˉ
+ 300            *     @2?êy  ?T
+ 301            * @·μ???μ ?T
+ 302            * @×￠               ê1?üRTC?D??ò??°RTCê?3?￡??D??ê±??1s
+ 303          ***************************************************************************************/
+ 304          void RCT_Init(void)
+ 305          {
+ 306   1              CLKCON |= 0x04;                                         //使能外部晶振
+ 307   1              while((CLKCON&0x40)!=0x40);                     //等待外部低频晶振起振
+ 308   1              //RTCC = 0x13;                                          //RTC中断时间1s,允许RTC时钟输出
+ 309   1              RTCC = 0x1f;                                            //RTC中断时间8s,允许RTC时钟输出
+ 310   1              RTCO_MAP = 0x03;                                        //RCT时钟输出映射P0.3口
+ 311   1              ERTC = 0;                                                       //disable RTC中断
+ 312   1      }
+ 313          
+ 314          /***************************************************************************************
+ 315           * @??          ?????
+ 316           * @??  ?
+ 317           * @???  ?
+ 318           * @?           ????????????
+ 319           ***************************************************************************************/
+ 320          
+ 321          void SendChar(unsigned char Char)
+ 322          {
+ 323   1              SBUF = Char;
+ 324   1              while(!(SCON&0x02));
+ 325   1              SCON &=~ 0x02;                          //????????????0
+ 326   1      }
+ 327          
+ 328          void SendString(unsigned char *p)
+ 329          {
+ 330   1              while(*p){
+ 331   2                      SendChar(*p);
+ 332   2                      p++;
+ 333   2              }
+ 334   1      }
+ 335          
+ 336          unsigned char* CharToHexStr(unsigned char n)
+ 337          {
+ 338   1              unsigned char *pstr;
+ 339   1      
+ 340   1              pstr = str;
+ 341   1              *pstr = n / 16 + '0';
+ 342   1              if (*pstr > '9')
+ 343   1                      *pstr += 39;
+ 344   1      
+ 345   1              *++pstr = n % 16 + '0';
+ 346   1              if (*pstr > '9')
+ 347   1                      *pstr += 39;
+ 348   1      
+ 349   1              *(++pstr) = '\0';
+ 350   1              return str;
+ 351   1      }
+ 352          
+ 353          unsigned char* CharToString(unsigned char n)
+ 354          {
+ 355   1              unsigned char *pstr;
+ 356   1      
+ 357   1              pstr = str;
+ 358   1              if (n > 99) {
+ 359   2                      *pstr++ = n/100 + '0';
+C51 COMPILER V9.56.0.0   MAIN                                                              09/26/2018 10:29:49 PAGE 7   
+
+ 360   2                      n %= 100;
+ 361   2                      *pstr++ = n/10 + '0';
+ 362   2                      n %= 10;
+ 363   2                      *pstr = n + '0';
+ 364   2              } else if (n > 9) {
+ 365   2                      *pstr++ = n/10 + '0';
+ 366   2                      n %= 10;
+ 367   2                      *pstr = n + '0';
+ 368   2              } else {
+ 369   2                      *pstr = n + '0';
+ 370   2              }
+ 371   1      
+ 372   1              *(++pstr) = '\0';
+ 373   1              return str;
+ 374   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1108    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      8      24
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  5 WARNING(S),  0 ERROR(S)
